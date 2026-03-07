@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { easings } from "@/lib/motion";
 
 interface ScrollRevealProps {
   children: React.ReactNode;
@@ -40,7 +41,7 @@ export function ScrollReveal({
       initial={{ opacity: 0, ...directionMap[direction] }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
       viewport={{ once, margin: "-50px" }}
-      transition={{ duration, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration, delay, ease: easings.entrance }}
       className={cn(className)}
     >
       {children}

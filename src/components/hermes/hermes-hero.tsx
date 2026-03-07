@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { BackgroundGradientAnimation } from "@/components/aceternity/background-gradient-animation";
+import { AuroraBackground } from "@/components/shared/aurora-background";
 import { TypewriterEffect } from "@/components/aceternity/typewriter-effect";
 import { Sparkles } from "@/components/aceternity/sparkles";
 import { metrics } from "@/data/hermes";
+import { springs, easings, fadeUp, fadeScale, staggerContainer } from "@/lib/motion";
 
 const statItems = [
   {
@@ -25,6 +26,15 @@ const statItems = [
   },
 ];
 
+const statPillStagger = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
 export function HermesHero() {
   const [scrollOpacity, setScrollOpacity] = useState(1);
   const prefersReducedMotion = useReducedMotion();
@@ -39,28 +49,30 @@ export function HermesHero() {
 
   return (
     <section className="relative">
-      <BackgroundGradientAnimation
-        gradientBackgroundStart="rgb(5, 5, 5)"
-        gradientBackgroundEnd="rgb(15, 5, 25)"
-        firstColor="139, 92, 246"
-        secondColor="100, 50, 200"
-        thirdColor="249, 115, 22"
-        fourthColor="80, 30, 160"
-        fifthColor="200, 80, 20"
-        pointerColor="167, 139, 250"
-        size="90%"
-        blendingValue="hard-light"
-        interactive={!prefersReducedMotion}
+      <AuroraBackground
+        colors={[
+          "rgba(99, 102, 241, 0.35)",
+          "rgba(79, 70, 229, 0.3)",
+          "rgba(249, 115, 22, 0.15)",
+          "rgba(129, 140, 248, 0.25)",
+          "rgba(67, 56, 202, 0.2)",
+        ]}
+        speed={0.7}
+        particles={true}
+        particleCount={60}
+        blur={85}
+        intensity={0.5}
         containerClassName="!h-screen"
         className="absolute inset-0 z-10 flex flex-col items-center justify-center"
       >
-        <div className="relative z-10 max-w-4xl px-6 text-center">
+        <motion.div
+          className="relative z-10 max-w-4xl px-6 text-center"
+          variants={staggerContainer}
+          initial={prefersReducedMotion ? undefined : "hidden"}
+          animate="visible"
+        >
           {/* Back link */}
-          <motion.div
-            initial={prefersReducedMotion ? {} : { opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+          <motion.div variants={fadeUp} transition={{ duration: 0.5, ease: easings.entrance }}>
             <a
               href="/"
               className="mb-10 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs font-medium text-text-tertiary backdrop-blur-sm transition-all duration-200 hover:border-white/[0.15] hover:text-white"
@@ -83,52 +95,48 @@ export function HermesHero() {
           </motion.div>
 
           {/* Claude badge */}
-          <motion.div
-            initial={prefersReducedMotion ? {} : { opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            <span className="mb-8 inline-flex items-center gap-1.5 rounded-full border border-accent-500/30 bg-accent-500/10 px-4 py-1.5 text-xs font-medium text-accent-400 backdrop-blur-sm">
+          <motion.div variants={fadeScale} transition={{ duration: 0.5, ease: easings.entrance }}>
+            <span className="mb-8 inline-flex items-center gap-1.5 rounded-full border border-hermes-500/30 bg-hermes-500/10 px-4 py-1.5 text-xs font-medium text-hermes-400 backdrop-blur-sm">
               Built with Claude &middot; Anthropic
             </span>
           </motion.div>
 
           {/* Title */}
           <motion.h1
-            initial={prefersReducedMotion ? {} : { opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            variants={{
+              hidden: { opacity: 0, y: 30, scale: 0.97 },
+              visible: { opacity: 1, y: 0, scale: 1 },
+            }}
+            transition={{ ...springs.smooth, duration: 0.7 }}
             className="mb-6"
           >
-            <Sparkles color="#a78bfa" count={10}>
-              <span className="text-8xl font-bold tracking-tight sm:text-9xl md:text-[10rem] bg-gradient-to-r from-accent-400 via-brand-400 to-brand-300 bg-clip-text text-transparent">
+            <Sparkles color="#818cf8" count={10}>
+              <span className="bg-gradient-to-r from-hermes-400 via-hermes-300 to-brand-400 bg-clip-text text-8xl font-bold tracking-tight text-transparent sm:text-9xl md:text-[10rem]">
                 Hermes
               </span>
             </Sparkles>
           </motion.h1>
 
           <motion.div
-            initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            variants={fadeUp}
+            transition={{ duration: 0.5, ease: easings.entrance }}
             className="mb-8"
           >
             <TypewriterEffect
               words={[
-                { text: "AI-Powered", className: "text-accent-400" },
+                { text: "AI-Powered", className: "text-hermes-400" },
                 { text: "Infrastructure" },
                 { text: "Command" },
                 { text: "Center" },
               ]}
               className="!text-lg !font-mono !font-medium tracking-wider sm:!text-xl"
-              cursorClassName="!bg-accent-500 !h-5"
+              cursorClassName="!bg-hermes-500 !h-5"
             />
           </motion.div>
 
           <motion.p
-            initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
+            variants={fadeUp}
+            transition={{ duration: 0.5, ease: easings.entrance }}
             className="mx-auto max-w-2xl text-lg leading-relaxed text-text-secondary"
           >
             A self-improving multi-agent system that operates, troubleshoots,
@@ -138,15 +146,16 @@ export function HermesHero() {
 
           {/* Stat pills */}
           <motion.div
-            initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
+            variants={statPillStagger}
             className="mt-12 flex flex-wrap items-center justify-center gap-4"
           >
             {statItems.map((stat) => (
-              <div
+              <motion.div
                 key={stat.label}
-                className="group inline-flex items-baseline gap-2 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-6 py-3 backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-white/[0.12] hover:shadow-lg hover:shadow-accent-500/5"
+                variants={fadeUp}
+                whileHover={{ y: -2, scale: 1.02 }}
+                transition={springs.snappy}
+                className="group inline-flex items-baseline gap-2 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-6 py-3 backdrop-blur-xl transition-colors duration-300 hover:border-white/[0.12] hover:shadow-lg hover:shadow-hermes-500/5"
               >
                 <span className="font-mono text-2xl font-bold text-white md:text-3xl">
                   {stat.value}
@@ -156,10 +165,10 @@ export function HermesHero() {
                   <br />
                   <span className="text-text-muted">{stat.sublabel}</span>
                 </span>
-              </div>
+              </motion.div>
             ))}
           </motion.div>
-        </div>
+        </motion.div>
 
         {/* Scroll indicator */}
         <motion.div
@@ -168,7 +177,7 @@ export function HermesHero() {
           animate={prefersReducedMotion ? {} : { y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
-          <span className="text-xs tracking-widest text-white/30 uppercase">
+          <span className="text-xs uppercase tracking-widest text-white/30">
             Explore the system
           </span>
           <svg
@@ -185,7 +194,7 @@ export function HermesHero() {
             />
           </svg>
         </motion.div>
-      </BackgroundGradientAnimation>
+      </AuroraBackground>
     </section>
   );
 }

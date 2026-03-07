@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/scroll-reveal";
 import { GlowingStarsCard } from "@/components/aceternity/glowing-stars";
 import { Sparkles } from "@/components/aceternity/sparkles";
@@ -67,10 +68,12 @@ export function BuiltWithAI() {
 
         {/* CTA */}
         <ScrollReveal delay={0.7} className="mt-16 text-center">
-          <a
+          <motion.a
             href="https://github.com"
             target="_blank"
             rel="noopener noreferrer"
+            whileHover={{ scale: 1.03, y: -1 }}
+            transition={{ duration: 0.2 }}
             className="group inline-flex items-center gap-2 rounded-full bg-brand-500 px-8 py-3.5 text-sm font-medium text-white transition-all duration-300 hover:bg-brand-400 hover:shadow-[0_0_30px_rgba(249,115,22,0.25)]"
           >
             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -90,7 +93,7 @@ export function BuiltWithAI() {
                 d="M13 7l5 5m0 0l-5 5m5-5H6"
               />
             </svg>
-          </a>
+          </motion.a>
         </ScrollReveal>
       </div>
     </section>

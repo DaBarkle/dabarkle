@@ -189,12 +189,6 @@ export function ValidationGates() {
         </p>
       </ScrollReveal>
 
-      <style>{`
-        @keyframes scanline {
-          0% { background-position: 0 -40px; }
-          100% { background-position: 0 100%; }
-        }
-      `}</style>
     </div>
   );
 }

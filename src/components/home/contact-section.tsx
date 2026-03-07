@@ -69,15 +69,16 @@ export function ContactSection() {
         <div className="mt-16 grid gap-6 md:grid-cols-3">
           {contacts.map((contact, i) => (
             <ScrollReveal key={contact.label} delay={0.2 + i * 0.1}>
-              <a
+              <motion.a
                 href={contact.href}
                 rel="noopener noreferrer"
                 className="block"
+                whileHover={{ y: -4, transition: { duration: 0.25 } }}
               >
-                <GlowingStarsCard className="h-full text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                <GlowingStarsCard className="group/contact h-full text-center transition-all duration-300 hover:shadow-lg">
                   <div className="flex flex-col items-center p-4">
                     <div
-                      className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl transition-colors"
+                      className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-300 group-hover/contact:scale-110"
                       style={{
                         background: `${contact.color}12`,
                         color: contact.color,
@@ -88,12 +89,12 @@ export function ContactSection() {
                     <span className="text-sm font-semibold text-white">
                       {contact.label}
                     </span>
-                    <span className="mt-1 text-xs text-text-tertiary">
+                    <span className="mt-1 text-xs text-text-tertiary transition-colors duration-200 group-hover/contact:text-text-secondary">
                       {contact.value}
                     </span>
                   </div>
                 </GlowingStarsCard>
-              </a>
+              </motion.a>
             </ScrollReveal>
           ))}
         </div>

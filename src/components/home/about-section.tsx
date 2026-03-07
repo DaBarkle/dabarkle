@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/scroll-reveal";
-import { BentoGrid, BentoGridItem } from "@/components/aceternity/bento-grid";
 import { GlowingStarsCard } from "@/components/aceternity/glowing-stars";
 import { TextReveal } from "@/components/aceternity/text-reveal";
 import { GridBackground } from "@/components/aceternity/grid-background";
@@ -72,50 +71,58 @@ export function AboutSection() {
                 delay={0.1 + i * 0.1}
                 className={area.span}
               >
-                <GlowingStarsCard className="h-full">
-                  <div className="flex items-start gap-4">
-                    <div
-                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
-                      style={{ background: `${area.color}15` }}
-                    >
-                      <svg
-                        className="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke={area.color}
-                        strokeWidth="1.5"
+                <motion.div
+                  whileHover={{ y: -3, transition: { duration: 0.25 } }}
+                  className="h-full"
+                >
+                  <GlowingStarsCard className="group/skill h-full transition-shadow duration-300 hover:shadow-lg hover:shadow-black/20">
+                    <div className="flex items-start gap-4">
+                      <div
+                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-all duration-300 group-hover/skill:scale-110"
+                        style={{
+                          background: `${area.color}15`,
+                          boxShadow: `0 0 0px ${area.color}00`,
+                        }}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d={area.icon}
-                        />
-                      </svg>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="mb-1 text-lg font-bold text-white">
-                        {area.title}
-                      </h3>
-                      <p className="mb-4 text-sm leading-relaxed text-text-secondary">
-                        {area.description}
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {area.skills.map((skill) => (
-                          <span
-                            key={skill}
-                            className="rounded-full px-3 py-1 text-xs font-medium transition-colors duration-200"
-                            style={{
-                              background: `${area.color}10`,
-                              color: area.color,
-                            }}
-                          >
-                            {skill}
-                          </span>
-                        ))}
+                        <svg
+                          className="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke={area.color}
+                          strokeWidth="1.5"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d={area.icon}
+                          />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="mb-1 text-lg font-bold text-white">
+                          {area.title}
+                        </h3>
+                        <p className="mb-4 text-sm leading-relaxed text-text-secondary">
+                          {area.description}
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {area.skills.map((skill) => (
+                            <span
+                              key={skill}
+                              className="rounded-full px-3 py-1 text-xs font-medium transition-all duration-300 hover:scale-105"
+                              style={{
+                                background: `${area.color}10`,
+                                color: area.color,
+                              }}
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </GlowingStarsCard>
+                  </GlowingStarsCard>
+                </motion.div>
               </ScrollReveal>
             ))}
           </div>

@@ -269,7 +269,10 @@ export function ProjectsSection() {
           <div className="grid gap-6 md:grid-cols-2">
             {comingSoon.map((project, i) => (
               <ScrollReveal key={project.title} delay={0.5 + i * 0.15}>
-                <div className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-surface-1 p-8 transition-all duration-500 hover:border-white/[0.12] hover:shadow-lg hover:shadow-accent-500/5">
+                <motion.div
+                  whileHover={{ y: -2, transition: { duration: 0.25 } }}
+                  className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-surface-1 p-8 transition-all duration-500 hover:border-white/[0.12] hover:shadow-lg hover:shadow-accent-500/5"
+                >
                   {/* Gradient sweep on hover */}
                   <div
                     className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
@@ -280,9 +283,9 @@ export function ProjectsSection() {
                   />
                   <div className="relative">
                     <div className="mb-4 flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.03]">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.03] transition-colors duration-300 group-hover:bg-white/[0.06]">
                         <svg
-                          className="h-5 w-5 text-text-tertiary"
+                          className="h-5 w-5 text-text-tertiary transition-colors duration-300 group-hover:text-text-secondary"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -299,14 +302,14 @@ export function ProjectsSection() {
                         Coming Soon
                       </span>
                     </div>
-                    <h3 className="mb-2 text-lg font-semibold text-text-tertiary">
+                    <h3 className="mb-2 text-lg font-semibold text-text-tertiary transition-colors duration-300 group-hover:text-text-secondary">
                       {project.title}
                     </h3>
                     <p className="text-sm leading-relaxed text-text-muted">
                       {project.description}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               </ScrollReveal>
             ))}
           </div>

@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/scroll-reveal";
-import { SectionHeader } from "@/components/shared/section-header";
 import { TextReveal } from "@/components/aceternity/text-reveal";
 import { GridBackground } from "@/components/aceternity/grid-background";
 import { challengePoints } from "@/data/hermes";
@@ -59,7 +58,7 @@ export function TheChallenge() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.4 + i * 0.15 }}
-                        className="rounded-xl border border-red-500/10 bg-red-500/[0.03] p-4"
+                        className="rounded-xl border border-red-500/10 bg-red-500/[0.03] p-4 transition-colors duration-300 hover:border-red-500/20 hover:bg-red-500/[0.06]"
                       >
                         <div className="mb-1 flex items-center gap-2">
                           <div className="h-1.5 w-1.5 rounded-full bg-red-400/60" />
@@ -114,7 +113,7 @@ export function TheChallenge() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.4 + i * 0.15 }}
-                        className="rounded-xl border border-emerald-500/10 bg-emerald-500/[0.03] p-4"
+                        className="rounded-xl border border-emerald-500/10 bg-emerald-500/[0.03] p-4 transition-colors duration-300 hover:border-emerald-500/20 hover:bg-emerald-500/[0.06]"
                       >
                         <div className="mb-1 flex items-center gap-2">
                           <div className="h-1.5 w-1.5 rounded-full bg-emerald-400/60" />

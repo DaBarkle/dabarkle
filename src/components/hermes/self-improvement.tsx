@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useInView, useReducedMotion, AnimatePresence } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/scroll-reveal";
 import { SectionHeader } from "@/components/shared/section-header";
 import { GlowingStarsCard } from "@/components/aceternity/glowing-stars";
@@ -23,31 +23,41 @@ export function SelfImprovement() {
   });
   const prefersReducedMotion = useReducedMotion();
   const [activeStep, setActiveStep] = useState(-1);
+  const [hoveredStep, setHoveredStep] = useState<number | null>(null);
 
   useEffect(() => {
     if (!loopInView || prefersReducedMotion) return;
     const startDelay = setTimeout(() => {
       setActiveStep(0);
-    }, 800);
+    }, 600);
     const interval = setInterval(() => {
       setActiveStep((prev) => (prev + 1) % feedbackLoopSteps.length);
-    }, 1500);
+    }, 2000);
     return () => {
       clearTimeout(startDelay);
       clearInterval(interval);
     };
   }, [loopInView, prefersReducedMotion]);
 
-  const packetAngle =
-    activeStep >= 0
-      ? (activeStep / feedbackLoopSteps.length) * Math.PI * 2 - Math.PI / 2
-      : -Math.PI / 2;
-  const packetX = 300 + Math.cos(packetAngle) * 240;
-  const packetY = 150 + Math.sin(packetAngle) * 100;
-  const packetColor =
-    activeStep >= 0
-      ? feedbackLoopSteps[activeStep]?.color ?? "#a78bfa"
-      : "#a78bfa";
+  // Calculate positions for the orbital ring
+  const totalSteps = feedbackLoopSteps.length;
+  const svgW = 600;
+  const svgH = 340;
+  const cx = svgW / 2;
+  const cy = svgH / 2;
+  const rx = 230;
+  const ry = 120;
+
+  function getStepPos(i: number) {
+    const angle = (i / totalSteps) * Math.PI * 2 - Math.PI / 2;
+    return {
+      x: cx + Math.cos(angle) * rx,
+      y: cy + Math.sin(angle) * ry,
+    };
+  }
+
+  // Build the ellipse path for the traveling packet
+  const ellipsePath = `M ${cx} ${cy - ry} A ${rx} ${ry} 0 1 1 ${cx - 0.01} ${cy - ry}`;
 
   return (
     <section className="relative overflow-hidden bg-bg py-24 sm:py-32">
@@ -59,131 +69,207 @@ export function SelfImprovement() {
             subtitle={`After every session, the Optimizer agent analyzes performance across four layers and auto-applies safe improvements. ${metrics.optimizationsApplied} optimizations deployed over ${metrics.sessions} sessions. It can modify orchestration flow, but cannot touch its own safety rules.`}
           />
 
-          {/* Feedback loop */}
+          {/* Feedback loop visualization */}
           <div ref={loopRef} className="relative mb-16 mt-10 sm:mt-16">
             <ScrollReveal delay={0.2}>
-              <div className="mx-auto max-w-3xl rounded-2xl border border-white/[0.06] bg-surface-0/50 p-6 backdrop-blur-sm">
+              <div className="mx-auto max-w-3xl rounded-2xl border border-white/[0.06] bg-surface-0/50 p-4 backdrop-blur-sm sm:p-6">
                 <svg
                   aria-hidden="true"
-                  viewBox="0 0 600 300"
+                  viewBox={`0 0 ${svgW} ${svgH}`}
                   className="w-full"
                   preserveAspectRatio="xMidYMid meet"
                 >
+                  <defs>
+                    {/* Orbital gradient */}
+                    <linearGradient id="orbitGrad" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stopColor="rgba(167,139,250,0.3)" />
+                      <stop offset="33%" stopColor="rgba(251,191,36,0.3)" />
+                      <stop offset="66%" stopColor="rgba(52,211,153,0.3)" />
+                      <stop offset="100%" stopColor="rgba(167,139,250,0.3)" />
+                    </linearGradient>
+                    {/* Glow filter */}
+                    <filter id="nodeGlow">
+                      <feGaussianBlur stdDeviation="4" result="blur" />
+                      <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
+
+                  {/* Orbital ring - subtle background */}
                   <ellipse
-                    cx="300"
-                    cy="150"
-                    rx="240"
-                    ry="100"
+                    cx={cx}
+                    cy={cy}
+                    rx={rx}
+                    ry={ry}
                     fill="none"
-                    stroke="rgba(255,255,255,0.04)"
-                    strokeWidth="2"
+                    stroke="rgba(255,255,255,0.03)"
+                    strokeWidth="1.5"
                   />
 
+                  {/* Orbital ring - animated gradient overlay */}
+                  <ellipse
+                    cx={cx}
+                    cy={cy}
+                    rx={rx}
+                    ry={ry}
+                    fill="none"
+                    stroke="url(#orbitGrad)"
+                    strokeWidth="1.5"
+                    style={{
+                      opacity: loopInView ? 0.5 : 0,
+                      transition: "opacity 1s ease 0.5s",
+                    }}
+                  />
+
+                  {/* Connection lines between sequential steps */}
                   {feedbackLoopSteps.map((step, i) => {
-                    const angle =
-                      (i / feedbackLoopSteps.length) * Math.PI * 2 -
-                      Math.PI / 2;
-                    const cx = 300 + Math.cos(angle) * 240;
-                    const cy = 150 + Math.sin(angle) * 100;
-                    const isActive = activeStep === i;
+                    const current = getStepPos(i);
+                    const next = getStepPos((i + 1) % totalSteps);
+                    const isActiveConnection = activeStep === i;
                     return (
-                      <g key={step.id}>
-                        {isActive && (
+                      <line
+                        key={`conn-${step.id}`}
+                        x1={current.x}
+                        y1={current.y}
+                        x2={next.x}
+                        y2={next.y}
+                        stroke={step.color}
+                        strokeWidth={isActiveConnection ? 1.5 : 0.5}
+                        style={{
+                          opacity: isActiveConnection ? 0.4 : 0.06,
+                          transition: "all 0.6s ease",
+                        }}
+                      />
+                    );
+                  })}
+
+                  {/* Step nodes */}
+                  {feedbackLoopSteps.map((step, i) => {
+                    const pos = getStepPos(i);
+                    const isActive = activeStep === i;
+                    const isHovered = hoveredStep === i;
+                    const nodeRadius = isActive ? 22 : isHovered ? 20 : 16;
+
+                    return (
+                      <g
+                        key={step.id}
+                        onMouseEnter={() => setHoveredStep(i)}
+                        onMouseLeave={() => setHoveredStep(null)}
+                        style={{ cursor: "default" }}
+                      >
+                        {/* Pulse ring */}
+                        {isActive && !prefersReducedMotion && (
                           <circle
-                            cx={cx}
-                            cy={cy}
-                            r="18"
+                            cx={pos.x}
+                            cy={pos.y}
+                            r={nodeRadius}
                             fill="none"
                             stroke={step.color}
-                            strokeWidth="1"
-                            opacity="0.4"
+                            strokeWidth="1.5"
                           >
                             <animate
                               attributeName="r"
-                              values="18;28;18"
-                              dur="1.5s"
+                              values={`${nodeRadius};${nodeRadius + 14};${nodeRadius}`}
+                              dur="2s"
                               repeatCount="indefinite"
                             />
                             <animate
                               attributeName="opacity"
-                              values="0.4;0;0.4"
-                              dur="1.5s"
+                              values="0.5;0;0.5"
+                              dur="2s"
                               repeatCount="indefinite"
                             />
                           </circle>
                         )}
+
+                        {/* Glow */}
                         <circle
-                          cx={cx}
-                          cy={cy}
-                          r={isActive ? 18 : 14}
-                          fill={
-                            isActive
-                              ? step.color + "30"
-                              : "rgba(255,255,255,0.02)"
-                          }
+                          cx={pos.x}
+                          cy={pos.y}
+                          r={nodeRadius + 4}
+                          fill={step.color}
+                          style={{
+                            opacity: isActive ? 0.12 : 0,
+                            filter: "blur(10px)",
+                            transition: "opacity 0.5s",
+                          }}
+                        />
+
+                        {/* Node background */}
+                        <circle
+                          cx={pos.x}
+                          cy={pos.y}
+                          r={nodeRadius}
+                          fill={isActive ? `${step.color}25` : isHovered ? `${step.color}12` : "rgba(10,10,10,0.8)"}
                           stroke={step.color}
                           strokeWidth={isActive ? 2 : 1}
                           style={{
                             filter: isActive
-                              ? `drop-shadow(0 0 12px ${step.color}60)`
+                              ? `drop-shadow(0 0 12px ${step.color}50)`
                               : "none",
                             transition: "all 0.5s ease",
                           }}
                         />
+
+                        {/* Inner dot */}
                         <circle
-                          cx={cx}
-                          cy={cy}
-                          r="3"
+                          cx={pos.x}
+                          cy={pos.y}
+                          r={isActive ? 5 : 3}
                           fill={step.color}
                           style={{
-                            opacity: isActive ? 1 : 0.3,
-                            transition: "opacity 0.5s",
+                            opacity: isActive ? 1 : 0.4,
+                            transition: "all 0.5s",
                           }}
                         />
+
+                        {/* Label */}
                         <text
-                          x={cx}
-                          y={cy + (cy > 150 ? 30 : -24)}
+                          x={pos.x}
+                          y={pos.y + (pos.y > cy ? nodeRadius + 16 : -(nodeRadius + 8))}
                           textAnchor="middle"
-                          fill={
-                            isActive ? step.color : "rgba(255,255,255,0.3)"
-                          }
+                          fill={isActive ? step.color : isHovered ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.3)"}
                           fontSize="10"
                           fontWeight={isActive ? "600" : "400"}
-                          style={{ transition: "fill 0.5s" }}
+                          style={{ transition: "fill 0.4s" }}
                         >
                           {step.label}
                         </text>
-                        {step.id === "risk" && (
-                          <g>
+
+                        {/* Risk assessment annotation */}
+                        {step.id === "risk" && isActive && (
+                          <g style={{ opacity: 0.9 }}>
                             <rect
-                              x={cx + 24}
-                              y={cy - 18}
+                              x={pos.x + 28}
+                              y={pos.y - 18}
                               width="72"
                               height="14"
-                              rx="3"
-                              fill="rgba(52, 211, 153, 0.1)"
+                              rx="4"
+                              fill="rgba(52, 211, 153, 0.12)"
                             />
                             <text
-                              x={cx + 30}
-                              y={cy - 8}
-                              fill="rgba(52, 211, 153, 0.7)"
+                              x={pos.x + 34}
+                              y={pos.y - 8}
+                              fill="rgba(52, 211, 153, 0.8)"
                               fontSize="9"
                               className="font-mono"
                             >
                               LOW &rarr; auto
                             </text>
                             <rect
-                              x={cx + 24}
-                              y={cy - 2}
+                              x={pos.x + 28}
+                              y={pos.y - 2}
                               width="72"
                               height="14"
-                              rx="3"
+                              rx="4"
                               fill="rgba(251, 191, 36, 0.1)"
                             />
                             <text
-                              x={cx + 30}
-                              y={cy + 8}
-                              fill="rgba(251, 191, 36, 0.5)"
+                              x={pos.x + 34}
+                              y={pos.y + 8}
+                              fill="rgba(251, 191, 36, 0.6)"
                               fontSize="9"
                               className="font-mono"
                             >
@@ -195,68 +281,92 @@ export function SelfImprovement() {
                     );
                   })}
 
-                  {/* Traveling packet */}
+                  {/* Traveling packet on the elliptical orbit */}
                   {loopInView && activeStep >= 0 && !prefersReducedMotion && (
-                    <>
+                    <g>
                       <circle
-                        cx={packetX}
-                        cy={packetY}
                         r="5"
-                        fill={packetColor}
+                        fill={feedbackLoopSteps[activeStep >= 0 ? activeStep : 0]?.color ?? "#a78bfa"}
                         style={{
-                          filter: `drop-shadow(0 0 10px ${packetColor})`,
-                          transition:
-                            "cx 0.6s ease-in-out, cy 0.6s ease-in-out, fill 0.3s",
+                          filter: `drop-shadow(0 0 10px ${feedbackLoopSteps[activeStep >= 0 ? activeStep : 0]?.color ?? "#a78bfa"})`,
                         }}
-                      />
+                      >
+                        <animateMotion
+                          dur={`${totalSteps * 2}s`}
+                          repeatCount="indefinite"
+                          path={ellipsePath}
+                        />
+                      </circle>
                       <circle
-                        cx={packetX}
-                        cy={packetY}
-                        r="14"
-                        fill={packetColor}
-                        opacity="0.12"
-                        style={{
-                          filter: "blur(8px)",
-                          transition:
-                            "cx 0.6s ease-in-out, cy 0.6s ease-in-out",
-                        }}
-                      />
-                    </>
+                        r="12"
+                        fill={feedbackLoopSteps[activeStep >= 0 ? activeStep : 0]?.color ?? "#a78bfa"}
+                        opacity="0.1"
+                        style={{ filter: "blur(6px)" }}
+                      >
+                        <animateMotion
+                          dur={`${totalSteps * 2}s`}
+                          repeatCount="indefinite"
+                          path={ellipsePath}
+                        />
+                      </circle>
+                    </g>
                   )}
 
+                  {/* Center metrics */}
                   <text
-                    x="300"
-                    y="145"
+                    x={cx}
+                    y={cy - 8}
                     textAnchor="middle"
                     fill="white"
-                    fontSize="32"
+                    fontSize="38"
                     fontWeight="bold"
                     style={{
                       opacity: loopInView ? 1 : 0,
-                      transition: "opacity 0.5s ease 0.8s",
+                      transition: "opacity 0.6s ease 0.8s",
                     }}
                   >
                     {metrics.optimizationsApplied}
                   </text>
                   <text
-                    x="300"
-                    y="168"
+                    x={cx}
+                    y={cy + 16}
                     textAnchor="middle"
                     fill="rgba(255,255,255,0.3)"
-                    fontSize="10"
+                    fontSize="11"
                     style={{
                       opacity: loopInView ? 1 : 0,
-                      transition: "opacity 0.5s ease 1s",
+                      transition: "opacity 0.6s ease 1s",
                     }}
                   >
                     optimizations deployed
                   </text>
                 </svg>
+
+                {/* Step indicator dots below the diagram */}
+                <div className="mt-2 flex justify-center gap-1.5">
+                  {feedbackLoopSteps.map((step, i) => (
+                    <div
+                      key={step.id}
+                      className="h-1.5 rounded-full transition-all duration-500"
+                      style={{
+                        width: activeStep === i ? 20 : 6,
+                        background:
+                          activeStep === i
+                            ? step.color
+                            : "rgba(255,255,255,0.1)",
+                        boxShadow:
+                          activeStep === i
+                            ? `0 0 8px ${step.color}50`
+                            : "none",
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
             </ScrollReveal>
           </div>
 
-          {/* Highlight optimizations - GlowingStarsCards */}
+          {/* Highlight optimizations */}
           <ScrollReveal delay={0.4} className="mb-16">
             <h3 className="mb-8 text-center text-h3 text-white">
               Most Impactful Optimizations
@@ -289,7 +399,8 @@ export function SelfImprovement() {
               Evolution Timeline
             </h3>
             <div className="relative mx-auto max-w-3xl">
-              <div className="absolute top-5 left-0 right-0 h-px bg-white/[0.04] hidden sm:block">
+              {/* Horizontal line - desktop */}
+              <div className="absolute top-5 left-0 right-0 hidden h-px bg-white/[0.04] sm:block">
                 <div
                   className="h-full bg-gradient-to-r from-accent-500 to-brand-500 transition-all ease-out"
                   style={{
@@ -298,7 +409,7 @@ export function SelfImprovement() {
                   }}
                 />
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-5 gap-4 sm:gap-2">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-5 sm:gap-2">
                 {timeline.map((milestone, i) => (
                   <ScrollReveal
                     key={milestone.version}
@@ -322,7 +433,7 @@ export function SelfImprovement() {
                       <span className="mt-3 font-mono text-xs font-semibold text-white">
                         {milestone.version}
                       </span>
-                      <span className="mt-1 text-center text-[10px] text-text-tertiary leading-tight">
+                      <span className="mt-1 text-center text-[10px] leading-tight text-text-tertiary">
                         {milestone.label}
                       </span>
                       <span className="mt-0.5 text-center text-[9px] text-text-muted">

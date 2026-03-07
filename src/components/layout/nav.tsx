@@ -71,17 +71,24 @@ export function Nav() {
               </li>
               {isHomePage ? (
                 sections.map(({ id, label }) => (
-                  <li key={id}>
+                  <li key={id} className="relative">
                     <a
                       href={`#${id}`}
                       className={cn(
-                        "block rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200",
+                        "relative block rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200",
                         activeSection === id
-                          ? "bg-white/[0.06] text-white"
+                          ? "text-white"
                           : "text-text-secondary hover:bg-white/[0.03] hover:text-white"
                       )}
                     >
-                      {label}
+                      {activeSection === id && (
+                        <motion.span
+                          layoutId="nav-active"
+                          className="absolute inset-0 rounded-full bg-white/[0.08]"
+                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                        />
+                      )}
+                      <span className="relative z-10">{label}</span>
                     </a>
                   </li>
                 ))

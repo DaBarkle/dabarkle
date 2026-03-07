@@ -98,29 +98,50 @@ export function MobileMenu() {
             aria-modal="true"
             aria-label="Navigation menu"
           >
-            <div className="mb-10">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="mb-10"
+            >
               <BrandMark size={48} color="#f97316" animated={false} />
-            </div>
+            </motion.div>
+
+            {/* Decorative accent line */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
+              className="mb-8 h-px w-16 bg-gradient-to-r from-transparent via-brand-500/40 to-transparent"
+            />
 
             <nav>
-              <ul className="flex flex-col items-center gap-4">
+              <ul className="flex flex-col items-center gap-5">
                 {isHomePage ? (
                   sections.map(({ id, label }, i) => (
                     <motion.li
                       key={id}
-                      initial={{ opacity: 0, y: 8 }}
+                      initial={{ opacity: 0, y: 16 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.05, duration: 0.3 }}
+                      transition={{ delay: 0.1 + i * 0.08, duration: 0.4, ease: "easeOut" }}
                     >
                       <button
                         onClick={() => navigate(id)}
                         className={cn(
-                          "text-2xl font-semibold transition-colors duration-200",
+                          "relative text-2xl font-semibold transition-colors duration-200",
                           activeSection === id
                             ? "text-white"
                             : "text-text-secondary hover:text-white"
                         )}
                       >
+                        {activeSection === id && (
+                          <motion.span
+                            layoutId="mobile-nav-active"
+                            className="absolute -left-4 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-brand-500"
+                            style={{ boxShadow: "0 0 8px rgba(249,115,22,0.5)" }}
+                            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                          />
+                        )}
                         {label}
                       </button>
                     </motion.li>

@@ -15,6 +15,8 @@ interface BackgroundGradientAnimationProps {
   size?: string;
   blendingValue?: string;
   interactive?: boolean;
+  glowIntensity?: number;
+  containerOpacity?: number;
   className?: string;
   children?: React.ReactNode;
   containerClassName?: string;
@@ -32,6 +34,8 @@ export function BackgroundGradientAnimation({
   size = "80%",
   blendingValue = "hard-light",
   interactive = true,
+  glowIntensity = 0.5,
+  containerOpacity = 0.4,
   className,
   children,
   containerClassName,
@@ -96,7 +100,7 @@ export function BackgroundGradientAnimation({
       <svg className="hidden">
         <defs>
           <filter id="blurMe">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
             <feColorMatrix
               in="blur"
               mode="matrix"
@@ -109,15 +113,16 @@ export function BackgroundGradientAnimation({
       </svg>
       <div className={cn("", className)}>{children}</div>
       <div
-        className="gradients-container absolute inset-0 overflow-hidden opacity-70"
+        className="gradients-container absolute inset-0 overflow-hidden"
         style={{
-          filter: "url(#blurMe) blur(40px)",
+          opacity: containerOpacity,
+          filter: "url(#blurMe) blur(30px)",
         }}
       >
         <div
           className="absolute animate-first opacity-100"
           style={{
-            background: `radial-gradient(circle at center, rgba(var(--first-color), 0.8) 0, rgba(var(--first-color), 0) 50%) no-repeat`,
+            background: `radial-gradient(circle at center, rgba(var(--first-color), ${glowIntensity}) 0, rgba(var(--first-color), 0) 50%) no-repeat`,
             width: "var(--size)",
             height: "var(--size)",
             top: "calc(50% - var(--size) / 2)",
@@ -129,7 +134,7 @@ export function BackgroundGradientAnimation({
         <div
           className="absolute animate-second opacity-100"
           style={{
-            background: `radial-gradient(circle at center, rgba(var(--second-color), 0.8) 0, rgba(var(--second-color), 0) 50%) no-repeat`,
+            background: `radial-gradient(circle at center, rgba(var(--second-color), ${glowIntensity}) 0, rgba(var(--second-color), 0) 50%) no-repeat`,
             width: "var(--size)",
             height: "var(--size)",
             top: "calc(50% - var(--size) / 2)",
@@ -141,7 +146,7 @@ export function BackgroundGradientAnimation({
         <div
           className="absolute animate-third opacity-100"
           style={{
-            background: `radial-gradient(circle at center, rgba(var(--third-color), 0.8) 0, rgba(var(--third-color), 0) 50%) no-repeat`,
+            background: `radial-gradient(circle at center, rgba(var(--third-color), ${glowIntensity}) 0, rgba(var(--third-color), 0) 50%) no-repeat`,
             width: "var(--size)",
             height: "var(--size)",
             top: "calc(50% - var(--size) / 2 + 200px)",
@@ -151,9 +156,9 @@ export function BackgroundGradientAnimation({
           }}
         />
         <div
-          className="absolute animate-fourth opacity-70"
+          className="absolute animate-fourth opacity-100"
           style={{
-            background: `radial-gradient(circle at center, rgba(var(--fourth-color), 0.8) 0, rgba(var(--fourth-color), 0) 50%) no-repeat`,
+            background: `radial-gradient(circle at center, rgba(var(--fourth-color), ${glowIntensity}) 0, rgba(var(--fourth-color), 0) 50%) no-repeat`,
             width: "var(--size)",
             height: "var(--size)",
             top: "calc(50% - var(--size) / 2)",
@@ -165,7 +170,7 @@ export function BackgroundGradientAnimation({
         <div
           className="absolute animate-fifth opacity-100"
           style={{
-            background: `radial-gradient(circle at center, rgba(var(--fifth-color), 0.8) 0, rgba(var(--fifth-color), 0) 50%) no-repeat`,
+            background: `radial-gradient(circle at center, rgba(var(--fifth-color), ${glowIntensity}) 0, rgba(var(--fifth-color), 0) 50%) no-repeat`,
             width: "var(--size)",
             height: "var(--size)",
             top: "calc(50% - var(--size) / 2)",
@@ -178,9 +183,9 @@ export function BackgroundGradientAnimation({
         {interactive && (
           <div
             ref={interactiveRef}
-            className="absolute -top-1/2 -left-1/2 opacity-70"
+            className="absolute -top-1/2 -left-1/2 opacity-50"
             style={{
-              background: `radial-gradient(circle at center, rgba(var(--pointer-color), 0.8) 0, rgba(var(--pointer-color), 0) 50%) no-repeat`,
+              background: `radial-gradient(circle at center, rgba(var(--pointer-color), ${glowIntensity}) 0, rgba(var(--pointer-color), 0) 50%) no-repeat`,
               width: "100%",
               height: "100%",
               mixBlendMode: "var(--blending-value)" as React.CSSProperties["mixBlendMode"],
