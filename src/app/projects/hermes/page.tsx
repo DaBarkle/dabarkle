@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
 import { HermesHero } from "@/components/hermes/hermes-hero";
-import { TheChallenge } from "@/components/hermes/the-challenge";
-import { TheSystem } from "@/components/hermes/the-system";
-import { IntelligenceLayer } from "@/components/hermes/intelligence-layer";
-import { SelfImprovement } from "@/components/hermes/self-improvement";
-import { LivingMemory } from "@/components/hermes/living-memory";
+import { AmbientVision } from "@/components/hermes/ambient-vision";
+import { IntentRouter } from "@/components/hermes/intent-router";
+import { AgentEcosystem } from "@/components/hermes/agent-ecosystem";
+import { AmbientMemory } from "@/components/hermes/ambient-memory";
+import { SelfOptimization } from "@/components/hermes/self-optimization";
+import { SafetyGuardrails } from "@/components/hermes/safety-guardrails";
 import { MetricsDashboard } from "@/components/hermes/metrics-dashboard";
 import { BuiltWithAI } from "@/components/hermes/built-with-ai";
 import { Footer } from "@/components/layout/footer";
+import { SectionDivider } from "@/components/shared/section-divider";
 
 export const metadata: Metadata = {
-  title: "Hermes — AI-Powered Infrastructure Command Center",
+  title: "Hermes -- Ambient Intelligence Platform",
   description:
-    "A self-improving multi-agent system that operates, troubleshoots, and documents a production homelab with zero data loss. Built with Claude Code.",
+    "A unified platform that continuously learns, routes intent naturally, and acts proactively. 12 agents, 9 capabilities, 3-layer memory. Built with Claude Code.",
   openGraph: {
-    title: "Hermes — AI-Powered Infrastructure Command Center",
+    title: "Hermes -- Ambient Intelligence Platform",
     description:
-      "A self-improving multi-agent orchestration system with tiered routing, 3-gate validation, and living memory. Built with Claude.",
+      "An ambient intelligence system with intent-based routing, 3-layer memory, and self-optimization. Built with Claude.",
     type: "article",
   },
 };
@@ -26,12 +28,20 @@ export default function HermesPage() {
     <>
       <main id="main">
         <HermesHero />
-        <TheChallenge />
-        <TheSystem />
-        <IntelligenceLayer />
-        <SelfImprovement />
-        <LivingMemory />
+        <AmbientVision />
+        <SectionDivider variant="accent" />
+        <IntentRouter />
+        <SectionDivider variant="mixed" />
+        <AgentEcosystem />
+        <SectionDivider variant="accent" />
+        <AmbientMemory />
+        <SectionDivider variant="brand" />
+        <SelfOptimization />
+        <SectionDivider variant="mixed" />
+        <SafetyGuardrails />
+        <SectionDivider variant="accent" />
         <MetricsDashboard />
+        <SectionDivider variant="brand" />
         <BuiltWithAI />
       </main>
       <Footer />

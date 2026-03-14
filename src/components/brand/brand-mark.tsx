@@ -19,7 +19,7 @@ const pathData =
 
 export function BrandMark({
   size = 80,
-  color = "currentColor",
+  color = "#818cf8",
   delay = 0,
   duration = 900,
   animated = true,

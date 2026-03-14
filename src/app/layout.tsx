@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono, Geist } from "next/font/google";
 import { Nav } from "@/components/layout/nav";
 import { MobileMenu } from "@/components/layout/mobile-menu";
 import { AmbientLayer } from "@/components/layout/ambient-layer";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
@@ -48,10 +49,12 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <Nav />
-        <MobileMenu />
-        <AmbientLayer />
-        {children}
+        <TooltipProvider>
+          <Nav />
+          <MobileMenu />
+          <AmbientLayer />
+          {children}
+        </TooltipProvider>
       </body>
     </html>
   );

@@ -1,17 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/scroll-reveal";
-import { GlowingStarsCard } from "@/components/aceternity/glowing-stars";
+import { CardSpotlight } from "@/components/aceternity/card-spotlight";
 import { tiers } from "@/data/hermes";
 import { cn } from "@/lib/utils";
-
-const tierGlows: Record<number, string> = {
-  0: "rgba(52, 211, 153, 0.3)",
-  1: "rgba(251, 191, 36, 0.3)",
-  2: "rgba(167, 139, 250, 0.3)",
-};
 
 const tierIconPaths = [
   // Tier 1: skip/fast-forward
@@ -24,6 +18,7 @@ const tierIconPaths = [
 
 export function TieredRouting() {
   const [selectedTier, setSelectedTier] = useState(1);
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
@@ -35,56 +30,29 @@ export function TieredRouting() {
         </p>
       </ScrollReveal>
 
-      {/* Tier selector pills */}
-      <ScrollReveal
-        delay={0.2}
-        className="mb-10 flex flex-wrap justify-center gap-2 sm:gap-3"
-      >
-        {tiers.map((tier, i) => (
-          <button
-            key={tier.id}
-            onClick={() => setSelectedTier(i)}
-            className={cn(
-              "relative rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300",
-              selectedTier === i
-                ? "border-current"
-                : "border-white/[0.06] text-text-tertiary hover:border-white/[0.1] hover:text-white"
-            )}
-            style={
-              selectedTier === i
-                ? {
-                    color: tier.color,
-                    background: `${tier.color}10`,
-                    borderColor: `${tier.color}50`,
-                    boxShadow: `0 0 20px ${tier.color}15`,
-                  }
-                : undefined
-            }
-          >
-            {tier.name}
-          </button>
-        ))}
-      </ScrollReveal>
-
-      {/* Routing visualization - Desktop */}
-      <ScrollReveal delay={0.4} className="relative mb-12">
+      {/* Desktop routing visualization */}
+      <ScrollReveal delay={0.2} className="relative mb-12">
         <div className="hidden sm:block">
-          <div className="relative mx-auto max-w-3xl rounded-2xl border border-white/[0.06] bg-surface-0/50 p-8 backdrop-blur-sm">
+          <div className="relative mx-auto max-w-3xl">
             {/* Input node */}
-            <div className="flex justify-center mb-6">
+            <div className="flex justify-center">
               <motion.div
-                className="relative flex h-14 w-14 items-center justify-center rounded-full border-2 border-white/20 bg-surface-1"
-                animate={{
-                  boxShadow: [
-                    "0 0 0px rgba(255,255,255,0)",
-                    "0 0 15px rgba(255,255,255,0.1)",
-                    "0 0 0px rgba(255,255,255,0)",
-                  ],
-                }}
+                className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full border-2 border-white/20 bg-surface-1"
+                animate={
+                  prefersReducedMotion
+                    ? {}
+                    : {
+                        boxShadow: [
+                          "0 0 0px rgba(255,255,255,0)",
+                          "0 0 20px rgba(255,255,255,0.1)",
+                          "0 0 0px rgba(255,255,255,0)",
+                        ],
+                      }
+                }
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               >
                 <svg
-                  className="h-5 w-5 text-white"
+                  className="h-6 w-6 text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -96,64 +64,92 @@ export function TieredRouting() {
                     d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
                   />
                 </svg>
-                <span className="absolute -bottom-5 text-[10px] font-semibold uppercase tracking-wider text-text-tertiary">
+                <span className="absolute -bottom-6 whitespace-nowrap text-[10px] font-semibold uppercase tracking-wider text-text-tertiary">
                   Session In
                 </span>
               </motion.div>
             </div>
 
-            {/* Branching paths */}
-            <div className="relative mt-8">
-              {/* SVG connecting lines */}
+            {/* Branching paths with SVG */}
+            <div className="relative mt-10">
               <svg
                 viewBox="0 0 600 80"
-                className="absolute inset-x-0 top-0 w-full -translate-y-full"
+                className="w-full"
                 preserveAspectRatio="xMidYMid meet"
                 aria-hidden="true"
-                style={{ height: 60 }}
+                style={{ height: 70 }}
               >
                 {tiers.map((tier, i) => {
                   const startX = 300;
                   const endX = 100 + i * 200;
                   const isSelected = selectedTier === i;
-                  const midY = 30;
-                  const path = `M ${startX} 0 C ${startX} ${midY}, ${endX} ${midY}, ${endX} 60`;
+                  const midY = 35;
+                  const path = `M ${startX} 0 C ${startX} ${midY}, ${endX} ${midY}, ${endX} 70`;
 
                   return (
                     <g key={tier.id}>
-                      {/* Path track */}
+                      {/* Glow path */}
+                      {isSelected && (
+                        <path
+                          d={path}
+                          fill="none"
+                          stroke={tier.color}
+                          strokeWidth={6}
+                          style={{
+                            opacity: 0.1,
+                            filter: "blur(4px)",
+                          }}
+                        />
+                      )}
+                      {/* Main path */}
                       <path
                         d={path}
                         fill="none"
                         stroke={tier.color}
-                        strokeWidth={isSelected ? 2 : 0.8}
+                        strokeWidth={isSelected ? 2.5 : 1}
                         style={{
-                          opacity: isSelected ? 0.7 : 0.08,
+                          opacity: isSelected ? 0.8 : 0.08,
                           transition: "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
                         }}
                       />
-                      {/* Animated packet on selected path */}
-                      {isSelected && (
-                        <circle
-                          r="4"
-                          fill={tier.color}
-                          style={{
-                            filter: `drop-shadow(0 0 6px ${tier.color})`,
-                          }}
-                        >
-                          <animateMotion
-                            dur="2s"
-                            repeatCount="indefinite"
-                            path={path}
-                          />
-                        </circle>
+                      {/* Animated energy packet on selected path */}
+                      {isSelected && !prefersReducedMotion && (
+                        <>
+                          <circle
+                            r="5"
+                            fill={tier.color}
+                            style={{
+                              filter: `drop-shadow(0 0 8px ${tier.color})`,
+                            }}
+                          >
+                            <animateMotion
+                              dur="2s"
+                              repeatCount="indefinite"
+                              path={path}
+                            />
+                          </circle>
+                          {/* Trail particle */}
+                          <circle
+                            r="10"
+                            fill={tier.color}
+                            opacity="0.15"
+                            style={{ filter: "blur(4px)" }}
+                          >
+                            <animateMotion
+                              dur="2s"
+                              repeatCount="indefinite"
+                              path={path}
+                              begin="0.15s"
+                            />
+                          </circle>
+                        </>
                       )}
                     </g>
                   );
                 })}
               </svg>
 
-              {/* Tier cards */}
+              {/* Tier selection cards */}
               <div className="grid grid-cols-3 gap-4">
                 {tiers.map((tier, i) => {
                   const isSelected = selectedTier === i;
@@ -176,11 +172,22 @@ export function TieredRouting() {
                           ? `${tier.color}60`
                           : "rgba(255,255,255,0.04)",
                         boxShadow: isSelected
-                          ? `0 8px 32px ${tier.color}15, 0 0 0 1px ${tier.color}10`
+                          ? `0 8px 32px ${tier.color}15, 0 0 0 1px ${tier.color}10, inset 0 1px 0 ${tier.color}08`
                           : "none",
                         outlineColor: tier.color,
                       }}
                     >
+                      {/* Top accent */}
+                      <motion.div
+                        className="absolute top-0 left-1/2 h-[2px] -translate-x-1/2 rounded-b-full"
+                        animate={{
+                          width: isSelected ? "60%" : "0%",
+                          opacity: isSelected ? 1 : 0,
+                        }}
+                        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                        style={{ background: tier.color }}
+                      />
+
                       {/* Glow overlay */}
                       <div
                         className="pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-500"
@@ -258,29 +265,39 @@ export function TieredRouting() {
             </div>
 
             {/* Output indicator */}
-            <div className="mt-6 flex justify-center">
+            <div className="mt-8 flex justify-center">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={selectedTier}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex items-center gap-2 rounded-full border px-4 py-2"
+                  initial={{ opacity: 0, y: 12, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex items-center gap-3 rounded-full border px-5 py-2.5"
                   style={{
                     borderColor: `${tiers[selectedTier].color}30`,
                     background: `${tiers[selectedTier].color}08`,
+                    boxShadow: `0 4px 24px ${tiers[selectedTier].color}10`,
                   }}
                 >
                   <span
-                    className="h-2 w-2 rounded-full"
+                    className="relative h-2.5 w-2.5 rounded-full"
                     style={{
                       background: tiers[selectedTier].color,
                       boxShadow: `0 0 8px ${tiers[selectedTier].color}60`,
                     }}
-                  />
+                  >
+                    {!prefersReducedMotion && (
+                      <motion.span
+                        className="absolute inset-0 rounded-full"
+                        style={{ background: tiers[selectedTier].color }}
+                        animate={{ scale: [1, 2, 1], opacity: [1, 0, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
+                    )}
+                  </span>
                   <span
-                    className="text-xs font-medium"
+                    className="text-sm font-medium"
                     style={{ color: tiers[selectedTier].color }}
                   >
                     {tiers[selectedTier].avgTime} avg
@@ -328,7 +345,7 @@ export function TieredRouting() {
                           ? `${tier.color}10`
                           : "transparent",
                         boxShadow: isSelected
-                          ? `0 0 20px ${tierGlows[i]}`
+                          ? `0 0 20px ${tier.color}20`
                           : "none",
                       }}
                     >
@@ -386,7 +403,7 @@ export function TieredRouting() {
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           className="mx-auto max-w-2xl"
         >
-          <GlowingStarsCard className="p-8">
+          <CardSpotlight className="p-8" spotlightColor={`${tiers[selectedTier].color}12`}>
             {(() => {
               const tier = tiers[selectedTier];
               return (
@@ -449,7 +466,7 @@ export function TieredRouting() {
                 </>
               );
             })()}
-          </GlowingStarsCard>
+          </CardSpotlight>
         </motion.div>
       </AnimatePresence>
 

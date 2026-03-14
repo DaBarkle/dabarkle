@@ -20,11 +20,17 @@ const sectionIds = sections.map((s) => s.id);
 export function Nav() {
   const pathname = usePathname();
   const isHomePage = pathname === "/";
+  const isProjectPage = pathname.startsWith("/projects/");
   const { progress, isScrolled } = useScrollProgress();
   const activeSection = useActiveSection(
     useMemo(() => (isHomePage ? sectionIds : []), [isHomePage])
   );
   const prefersReducedMotion = useReducedMotion();
+
+  // Extract project name for breadcrumb
+  const projectName = isProjectPage
+    ? pathname.split("/").pop()?.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
+    : null;
 
   return (
     <>
@@ -34,10 +40,33 @@ export function Nav() {
         className="fixed top-0 left-0 z-[70] h-[2px] w-full"
       >
         <div
-          className="relative h-full bg-gradient-to-r from-accent-500 via-brand-500 to-accent-400 transition-[width] duration-150 ease-out"
-          style={{ width: `${progress}%` }}
+          className="relative h-full transition-[width] duration-150 ease-out"
+          style={{
+            width: `${progress}%`,
+            background:
+              "linear-gradient(90deg, var(--color-brand-500), var(--color-brand-400) 40%, var(--color-accent-400) 80%, var(--color-teal-400))",
+          }}
         >
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 h-3 w-8 rounded-full bg-white/40 blur-sm" />
+          {/* Leading glow */}
+          <div
+            className="absolute right-0 top-1/2 -translate-y-1/2 h-4 w-12 rounded-full blur-md"
+            style={{
+              background:
+                progress > 5
+                  ? "rgba(99, 102, 241, 0.5)"
+                  : "transparent",
+            }}
+          />
+          {/* Trailing soft glow line */}
+          <div
+            className="absolute inset-0 h-full"
+            style={{
+              boxShadow:
+                progress > 2
+                  ? "0 0 8px rgba(99,102,241,0.3), 0 0 2px rgba(251,191,36,0.2)"
+                  : "none",
+            }}
+          />
         </div>
       </div>
 
@@ -67,7 +96,9 @@ export function Nav() {
           >
             <ul className="flex items-center gap-1">
               <li className="mr-1 flex items-center pl-1.5">
-                <BrandMark size={24} animated={false} color="#f97316" />
+                <a href="/">
+                  <BrandMark size={24} animated={false} color="#818cf8" />
+                </a>
               </li>
               {isHomePage ? (
                 sections.map(({ id, label }) => (
@@ -84,7 +115,11 @@ export function Nav() {
                       {activeSection === id && (
                         <motion.span
                           layoutId="nav-active"
-                          className="absolute inset-0 rounded-full bg-white/[0.08]"
+                          className="absolute inset-0 rounded-full"
+                          style={{
+                            background: "rgba(99, 102, 241, 0.12)",
+                            boxShadow: "0 1px 0 rgba(99, 102, 241, 0.3), inset 0 0 0 1px rgba(99, 102, 241, 0.08)",
+                          }}
                           transition={{ type: "spring", stiffness: 380, damping: 30 }}
                         />
                       )}
@@ -93,30 +128,44 @@ export function Nav() {
                   </li>
                 ))
               ) : (
-                <li>
-                  <a
-                    href="/"
-                    className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-text-secondary transition-all duration-200 hover:bg-white/[0.03] hover:text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-3 w-3"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
+                <>
+                  <li>
+                    <a
+                      href="/"
+                      className="rounded-full px-2.5 py-1.5 text-xs font-medium text-text-tertiary transition-all duration-200 hover:text-white"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                      />
-                    </svg>
-                    Home
-                  </a>
-                </li>
+                      D
+                    </a>
+                  </li>
+                  {isProjectPage && (
+                    <>
+                      <li className="text-text-muted text-[10px]">&rsaquo;</li>
+                      <li>
+                        <a
+                          href="/#projects"
+                          className="rounded-full px-2.5 py-1.5 text-xs font-medium text-text-tertiary transition-all duration-200 hover:text-white"
+                        >
+                          Projects
+                        </a>
+                      </li>
+                      <li className="text-text-muted text-[10px]">&rsaquo;</li>
+                      <li>
+                        <span className="rounded-full px-2.5 py-1.5 text-xs font-medium text-white">
+                          {projectName}
+                        </span>
+                      </li>
+                    </>
+                  )}
+                </>
               )}
             </ul>
+            {/* Bottom border glow */}
+            <div
+              className="absolute -bottom-px left-4 right-4 h-px"
+              style={{
+                background: "linear-gradient(90deg, transparent, rgba(99,102,241,0.3), rgba(251,191,36,0.2), transparent)",
+              }}
+            />
           </motion.nav>
         )}
       </AnimatePresence>

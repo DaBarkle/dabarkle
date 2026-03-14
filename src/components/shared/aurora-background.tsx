@@ -16,6 +16,8 @@ interface AuroraBackgroundProps {
   blur?: number;
   /** Overall intensity/opacity of the aurora */
   intensity?: number;
+  /** Enable animated mesh gradient overlay for premium look */
+  meshGradient?: boolean;
   className?: string;
   children?: React.ReactNode;
   containerClassName?: string;
@@ -34,6 +36,7 @@ export function AuroraBackground({
   particleCount = 40,
   blur = 80,
   intensity = 0.5,
+  meshGradient = true,
   className,
   children,
   containerClassName,
@@ -52,7 +55,7 @@ export function AuroraBackground({
     () => false
   );
 
-  // Particle canvas
+  // Particle canvas with connected-dots effect
   useEffect(() => {
     if (!particles || reducedMotion) return;
     const canvas = canvasRef.current;
@@ -78,30 +81,48 @@ export function AuroraBackground({
 
     resize();
 
-    // Generate particles
     const pts = Array.from({ length: particleCount }, () => ({
       x: Math.random() * w,
       y: Math.random() * h,
       vx: (Math.random() - 0.5) * 0.3 * speed,
-      vy: (Math.random() - 0.5) * 0.15 * speed - 0.1 * speed,
-      size: Math.random() * 1.5 + 0.5,
-      opacity: Math.random() * 0.4 + 0.1,
+      vy: (Math.random() - 0.5) * 0.15 * speed - 0.08 * speed,
+      size: Math.random() * 1.8 + 0.4,
+      opacity: Math.random() * 0.35 + 0.08,
       twinkleSpeed: Math.random() * 0.02 + 0.005,
       twinklePhase: Math.random() * Math.PI * 2,
     }));
 
     let time = 0;
+    const connectionDist = 120;
 
     function draw() {
       if (!ctx) return;
       ctx.clearRect(0, 0, w, h);
       time += 1;
 
+      // Draw connection lines between nearby particles
+      for (let i = 0; i < pts.length; i++) {
+        for (let j = i + 1; j < pts.length; j++) {
+          const dx = pts[i].x - pts[j].x;
+          const dy = pts[i].y - pts[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < connectionDist) {
+            const alpha = (1 - dist / connectionDist) * 0.06;
+            ctx.beginPath();
+            ctx.moveTo(pts[i].x, pts[i].y);
+            ctx.lineTo(pts[j].x, pts[j].y);
+            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Draw particles
       for (const p of pts) {
         p.x += p.vx;
         p.y += p.vy;
 
-        // Wrap around
         if (p.x < -10) p.x = w + 10;
         if (p.x > w + 10) p.x = -10;
         if (p.y < -10) p.y = h + 10;
@@ -131,7 +152,6 @@ export function AuroraBackground({
     };
   }, [particles, particleCount, speed, reducedMotion]);
 
-  // CSS custom properties for aurora orb animations
   const orbDurations = [20, 25, 30, 22, 28];
   const orbDelays = [0, -5, -10, -3, -15];
 
@@ -143,6 +163,22 @@ export function AuroraBackground({
         containerClassName
       )}
     >
+      {/* Animated mesh gradient base layer */}
+      {meshGradient && (
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            opacity: reducedMotion ? 0.3 : 0.2,
+            background: `
+              radial-gradient(ellipse 80% 60% at 20% 40%, ${colors[0] || "rgba(139,92,246,0.2)"} 0%, transparent 70%),
+              radial-gradient(ellipse 60% 80% at 80% 30%, ${colors[1] || "rgba(99,102,241,0.15)"} 0%, transparent 70%),
+              radial-gradient(ellipse 70% 50% at 50% 80%, ${colors[2] || "rgba(249,115,22,0.1)"} 0%, transparent 70%)
+            `,
+          }}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Aurora orbs layer */}
       <div
         className="pointer-events-none absolute inset-0"
@@ -155,7 +191,7 @@ export function AuroraBackground({
         {colors.map((color, i) => {
           const dur = orbDurations[i % orbDurations.length] / speed;
           const delay = orbDelays[i % orbDelays.length];
-          const size = 50 + (i % 3) * 15; // 50-80% of container
+          const size = 50 + (i % 3) * 15;
           return (
             <div
               key={i}
@@ -163,8 +199,8 @@ export function AuroraBackground({
               style={{
                 width: `${size}%`,
                 height: `${size}%`,
-                top: `${20 + (i * 10) % 30}%`,
-                left: `${10 + (i * 15) % 50}%`,
+                top: `${20 + ((i * 10) % 30)}%`,
+                left: `${10 + ((i * 15) % 50)}%`,
                 background: `radial-gradient(circle at center, ${color} 0%, transparent 70%)`,
                 animation: reducedMotion
                   ? "none"
@@ -177,9 +213,9 @@ export function AuroraBackground({
         })}
       </div>
 
-      {/* Subtle noise texture overlay */}
+      {/* Subtle noise texture */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.015]"
+        className="pointer-events-none absolute inset-0 opacity-[0.018]"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
           backgroundRepeat: "repeat",
@@ -188,12 +224,12 @@ export function AuroraBackground({
         aria-hidden="true"
       />
 
-      {/* Radial vignette */}
+      {/* Radial vignette - tighter for depth */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(5,5,5,0.6) 70%, rgba(5,5,5,0.95) 100%)",
+            "radial-gradient(ellipse at 50% 50%, transparent 25%, rgba(5,5,5,0.5) 65%, rgba(5,5,5,0.95) 100%)",
         }}
         aria-hidden="true"
       />
@@ -209,7 +245,6 @@ export function AuroraBackground({
 
       {/* Content */}
       <div className={cn("relative z-10", className)}>{children}</div>
-
     </div>
   );
 }

@@ -30,7 +30,7 @@ export function AmbientLayer() {
       displayX.current += (targetX.current - displayX.current) * 0.08;
       displayY.current += (targetY.current - displayY.current) * 0.08;
       if (divRef.current) {
-        divRef.current.style.background = `radial-gradient(400px circle at ${displayX.current}px ${displayY.current}px, rgba(139,92,246,0.12), transparent 60%)`;
+        divRef.current.style.background = `radial-gradient(400px circle at ${displayX.current}px ${displayY.current}px, rgba(99,102,241,0.10), transparent 60%)`;
       }
       frameRef.current = requestAnimationFrame(tick);
     }

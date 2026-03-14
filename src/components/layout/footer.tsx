@@ -3,6 +3,13 @@
 import { motion } from "framer-motion";
 import { BrandMark } from "@/components/brand/brand-mark";
 
+const navLinks = [
+  { label: "Home", href: "/#hero" },
+  { label: "About", href: "/#about" },
+  { label: "Projects", href: "/#projects" },
+  { label: "Contact", href: "/#contact" },
+];
+
 const socialLinks = [
   {
     label: "GitHub",
@@ -30,38 +37,85 @@ export function Footer() {
   }
 
   return (
-    <footer className="relative bg-bg py-16 border-t border-border-subtle">
-      <div className="mx-auto max-w-5xl px-6">
-        <div className="flex flex-col items-center gap-3">
-          <BrandMark size={32} color="#f97316" animated={false} />
-          <span className="text-lg font-semibold text-white">DaBarkle</span>
+    <footer className="relative bg-bg pt-20 pb-16">
+      {/* Gradient separator line */}
+      <div
+        aria-hidden="true"
+        className="absolute top-0 left-0 right-0 h-px"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.3) 30%, rgba(251,191,36,0.3) 70%, transparent 100%)",
+        }}
+      />
+      {/* Subtle glow underneath separator */}
+      <div
+        aria-hidden="true"
+        className="absolute top-0 left-1/2 -translate-x-1/2 h-24 w-[60%] pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.06), transparent 70%)",
+        }}
+      />
+
+      <div className="relative mx-auto max-w-5xl px-6">
+        {/* 3-column layout */}
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+          {/* Brand + tagline */}
+          <div className="flex flex-col items-center md:items-start">
+            <div className="flex items-center gap-3">
+              <BrandMark size={32} color="#818cf8" animated={false} />
+              <span className="text-lg font-semibold text-white">DaBarkle</span>
+            </div>
+            <p className="mt-3 text-sm text-text-tertiary md:text-left text-center">
+              Building intelligent systems that evolve themselves.
+            </p>
+          </div>
+
+          {/* Nav links */}
+          <div className="flex flex-col items-center gap-2">
+            <span className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-text-muted">Navigate</span>
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="text-sm text-text-tertiary transition-colors duration-200 hover:text-white"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          {/* Social links */}
+          <div className="flex flex-col items-center md:items-end gap-3">
+            <span className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-text-muted">Connect</span>
+            <div className="flex items-center gap-3">
+              {socialLinks.map((link) => (
+                <motion.a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ y: -2, scale: 1.05 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border-default text-text-tertiary transition-all duration-300 hover:border-brand-400/40 hover:text-white hover:shadow-[0_0_12px_rgba(99,102,241,0.15)]"
+                  aria-label={link.label}
+                >
+                  <svg className={link.size} fill="currentColor" viewBox="0 0 24 24">
+                    <path d={link.icon} />
+                  </svg>
+                </motion.a>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="mt-8 flex items-center justify-center gap-3">
-          {socialLinks.map((link) => (
-            <motion.a
-              key={link.label}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ y: -2, scale: 1.05 }}
-              transition={{ duration: 0.2 }}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-border-default text-text-tertiary transition-colors duration-200 hover:border-brand-500/40 hover:text-white hover:shadow-[0_0_12px_rgba(249,115,22,0.15)]"
-              aria-label={link.label}
-            >
-              <svg className={link.size} fill="currentColor" viewBox="0 0 24 24">
-                <path d={link.icon} />
-              </svg>
-            </motion.a>
-          ))}
-        </div>
-
-        <div className="mt-8 flex justify-center">
+        {/* Back to top */}
+        <div className="mt-10 flex justify-center">
           <motion.button
             onClick={scrollToTop}
             whileHover={{ y: -2 }}
             transition={{ duration: 0.2 }}
-            className="group flex items-center gap-2 rounded-full border border-border-default px-4 py-2 text-xs font-medium text-text-tertiary transition-colors duration-200 hover:border-border-strong hover:text-white"
+            className="group flex items-center gap-2 rounded-full border border-border-default px-4 py-2 text-xs font-medium text-text-tertiary transition-all duration-300 hover:border-border-strong hover:text-white"
           >
             <svg
               className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5"
@@ -80,11 +134,21 @@ export function Footer() {
           </motion.button>
         </div>
 
-        <div className="mt-10 text-center">
+        {/* Decorative divider */}
+        <div
+          aria-hidden="true"
+          className="mx-auto mt-10 mb-8 h-px w-24"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)",
+          }}
+        />
+
+        <div className="text-center">
           <p className="font-mono text-sm text-text-tertiary">
             Built with Next.js + Tailwind CSS + Framer Motion
           </p>
-          <p className="mt-2 text-xs text-text-tertiary opacity-30">
+          <p className="mt-2 text-xs text-text-muted">
             DaBarkle
           </p>
         </div>

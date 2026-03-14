@@ -113,7 +113,7 @@ export function InfiniteMovingCards({
                 <span className="flex flex-col gap-1">
                   <span
                     className="text-sm font-medium leading-[1.6]"
-                    style={{ color: item.color || "#a78bfa" }}
+                    style={{ color: item.color || "#818cf8" }}
                   >
                     {item.name}
                   </span>

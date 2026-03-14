@@ -57,7 +57,7 @@ export function HoverEffect({ items, className }: HoverEffectProps) {
               {item.icon && (
                 <div
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-colors"
-                  style={{ background: `${item.color || "#a78bfa"}15` }}
+                  style={{ background: `${item.color || "#818cf8"}15` }}
                 >
                   {item.icon}
                 </div>

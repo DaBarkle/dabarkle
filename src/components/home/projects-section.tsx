@@ -5,23 +5,23 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ScrollReveal } from "@/components/shared/scroll-reveal";
 import { CardContainer, CardBody, CardItem } from "@/components/aceternity/three-d-card";
-import { Sparkles } from "@/components/aceternity/sparkles";
 import { GridBackground } from "@/components/aceternity/grid-background";
 import { CountUp } from "@/components/shared/count-up";
 
 const agents = [
-  { label: "Analyst", color: "#a78bfa" },
-  { label: "Surgeon", color: "#fb923c" },
-  { label: "Formatter", color: "#fbbf24" },
-  { label: "Optimizer", color: "#8b5cf6" },
+  { label: "Expert", color: "#818cf8" },
+  { label: "Surgeon", color: "#fbbf24" },
+  { label: "Optimizer", color: "#6366f1" },
+  { label: "Designer", color: "#f59e0b" },
+  { label: "Investigator", color: "#2dd4bf" },
+  { label: "Formatter", color: "#14b8a6" },
 ];
 
 const tags = [
-  "Multi-Agent",
-  "Self-Improving",
-  "Next.js",
-  "TypeScript",
-  "AI Orchestration",
+  "Ambient Intelligence",
+  "Intent Routing",
+  "Self-Optimizing",
+  "Semantic Memory",
 ];
 
 const comingSoon = [
@@ -44,7 +44,7 @@ export function ProjectsSection() {
   useEffect(() => {
     if (prefersReducedMotion) return;
     const interval = setInterval(() => {
-      setActiveNode((prev) => (prev + 1) % 4);
+      setActiveNode((prev) => (prev + 1) % agents.length);
     }, 1200);
     return () => clearInterval(interval);
   }, [prefersReducedMotion]);
@@ -75,99 +75,48 @@ export function ProjectsSection() {
                     <CardItem translateZ={50} className="md:w-2/5">
                       <div className="flex items-center justify-center">
                         <svg
-                          viewBox="0 0 280 240"
+                          viewBox="0 0 280 280"
                           className="h-56 w-full max-w-[280px]"
                         >
-                          {/* Connection lines */}
+                          {/* Central hub */}
+                          <circle cx="140" cy="140" r="28" fill="rgba(99,102,241,0.15)" stroke="#818cf8" strokeWidth="2" />
+                          <text x="140" y="137" textAnchor="middle" fill="#818cf8" fontSize="10" fontWeight="700" className="font-mono">H</text>
+                          <text x="140" y="150" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="8">hub</text>
+
+                          {/* Radial agent nodes */}
                           {agents.map((agent, i) => {
-                            if (i >= 3) return null;
-                            const y1 = 25 + i * 55 + 18;
-                            const y2 = 25 + (i + 1) * 55 - 18;
-                            return (
-                              <line
-                                key={`line-${i}`}
-                                x1="140"
-                                y1={y1}
-                                x2="140"
-                                y2={y2}
-                                stroke={agent.color}
-                                strokeWidth="2"
-                                strokeDasharray="4 3"
-                                className="transition-opacity duration-500"
-                                style={{
-                                  opacity:
-                                    activeNode === i || activeNode === i + 1
-                                      ? 0.6
-                                      : 0.15,
-                                }}
-                              />
-                            );
-                          })}
-                          {agents.map((agent, i) => {
-                            const y = 25 + i * 55;
+                            const angle = (i / agents.length) * Math.PI * 2 - Math.PI / 2;
+                            const r = 95;
+                            const x = 140 + Math.cos(angle) * r;
+                            const y = 140 + Math.sin(angle) * r;
+                            const isActive = activeNode === i;
                             return (
                               <g key={agent.label}>
+                                {/* Connection line */}
+                                <line x1="140" y1="140" x2={x} y2={y}
+                                  stroke={agent.color} strokeWidth={isActive ? 2 : 0.5}
+                                  strokeDasharray={isActive ? "none" : "3 3"}
+                                  style={{ opacity: isActive ? 0.6 : 0.1, transition: "all 0.5s" }}
+                                />
                                 {/* Pulse ring */}
-                                {activeNode === i && (
-                                  <circle
-                                    cx="140"
-                                    cy={y}
-                                    r="22"
-                                    fill="none"
-                                    stroke={agent.color}
-                                    strokeWidth="1"
-                                    opacity="0.4"
-                                  >
-                                    <animate
-                                      attributeName="r"
-                                      values="22;32;22"
-                                      dur="1.5s"
-                                      repeatCount="indefinite"
-                                    />
-                                    <animate
-                                      attributeName="opacity"
-                                      values="0.4;0;0.4"
-                                      dur="1.5s"
-                                      repeatCount="indefinite"
-                                    />
+                                {isActive && (
+                                  <circle cx={x} cy={y} r="16" fill="none" stroke={agent.color} strokeWidth="1" opacity="0.4">
+                                    <animate attributeName="r" values="16;26;16" dur="1.5s" repeatCount="indefinite" />
+                                    <animate attributeName="opacity" values="0.4;0;0.4" dur="1.5s" repeatCount="indefinite" />
                                   </circle>
                                 )}
-                                <circle
-                                  cx="140"
-                                  cy={y}
-                                  r="18"
-                                  fill="none"
-                                  stroke={agent.color}
-                                  strokeWidth="2"
-                                  className="transition-all duration-500"
-                                  style={{
-                                    opacity: activeNode === i ? 1 : 0.25,
-                                    filter:
-                                      activeNode === i
-                                        ? `drop-shadow(0 0 10px ${agent.color})`
-                                        : "none",
-                                  }}
+                                {/* Node */}
+                                <circle cx={x} cy={y} r="14" fill={isActive ? `${agent.color}20` : "rgba(10,10,10,0.8)"}
+                                  stroke={agent.color} strokeWidth={isActive ? 2 : 1}
+                                  style={{ opacity: isActive ? 1 : 0.3, filter: isActive ? `drop-shadow(0 0 8px ${agent.color})` : "none", transition: "all 0.5s" }}
                                 />
-                                <circle
-                                  cx="140"
-                                  cy={y}
-                                  r="6"
-                                  fill={agent.color}
-                                  className="transition-all duration-500"
-                                  style={{
-                                    opacity: activeNode === i ? 1 : 0.3,
-                                  }}
+                                <circle cx={x} cy={y} r="4" fill={agent.color}
+                                  style={{ opacity: isActive ? 1 : 0.3, transition: "opacity 0.5s" }}
                                 />
-                                <text
-                                  x="105"
-                                  y={y + 4}
-                                  textAnchor="end"
-                                  fill="white"
-                                  fontSize="12"
-                                  className="font-mono transition-opacity duration-500"
-                                  style={{
-                                    opacity: activeNode === i ? 0.9 : 0.25,
-                                  }}
+                                {/* Label */}
+                                <text x={x} y={y + (y > 140 ? 24 : -18)} textAnchor="middle"
+                                  fill="white" fontSize="9" className="font-mono"
+                                  style={{ opacity: isActive ? 0.9 : 0.2, transition: "opacity 0.5s" }}
                                 >
                                   {agent.label}
                                 </text>
@@ -180,50 +129,44 @@ export function ProjectsSection() {
 
                     {/* Right: Info */}
                     <CardItem translateZ={30} className="flex-1">
-                      <span className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-accent-500/30 bg-accent-500/10 px-3 py-1 text-xs font-medium text-accent-400">
-                        <Sparkles color="#a78bfa" count={3}>
-                          Featured Project
-                        </Sparkles>
+                      <span className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-brand-500/30 bg-brand-500/10 px-3 py-1 text-xs font-medium text-brand-400">
+                        Featured Project
                       </span>
                       <h3 className="mb-3 text-3xl font-bold text-white">
                         Hermes
                       </h3>
                       <p className="mb-6 text-base leading-relaxed text-text-secondary">
-                        A self-improving multi-agent orchestration system that
-                        maintains infrastructure documentation with zero data
-                        loss.
+                        An ambient intelligence platform that continuously
+                        learns, routes intent naturally, and acts proactively.
                       </p>
 
                       <CardItem translateZ={60} className="w-full">
                         <div className="mb-6 flex flex-wrap gap-6">
                           <div className="flex items-baseline gap-1.5">
                             <CountUp
-                              value={13}
-                              suffix="+"
+                              value={9}
                               className="text-2xl font-bold text-white"
                             />
                             <span className="text-xs text-text-tertiary">
-                              Sessions
+                              Capabilities
                             </span>
                           </div>
                           <div className="flex items-baseline gap-1.5">
                             <CountUp
-                              value={64}
-                              suffix="%"
+                              value={12}
                               className="text-2xl font-bold text-white"
                             />
                             <span className="text-xs text-text-tertiary">
-                              Token Savings
+                              Agents
                             </span>
                           </div>
                           <div className="flex items-baseline gap-1.5">
                             <CountUp
-                              value={100}
-                              suffix="%"
+                              value={3}
                               className="text-2xl font-bold text-white"
                             />
                             <span className="text-xs text-text-tertiary">
-                              Data Integrity
+                              Memory Layers
                             </span>
                           </div>
                         </div>
@@ -278,7 +221,7 @@ export function ProjectsSection() {
                     className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                     style={{
                       background:
-                        "linear-gradient(135deg, rgba(139,92,246,0.05) 0%, transparent 50%, rgba(249,115,22,0.05) 100%)",
+                        "linear-gradient(135deg, rgba(99,102,241,0.05) 0%, transparent 50%, rgba(251,191,36,0.05) 100%)",
                     }}
                   />
                   <div className="relative">

@@ -96,8 +96,8 @@ export function TracingBeam({ children, className }: TracingBeamProps) {
               y1={y1}
               y2={y2}
             >
-              <stop stopColor="#8b5cf6" stopOpacity="0" />
-              <stop stopColor="#8b5cf6" />
+              <stop stopColor="#6366f1" stopOpacity="0" />
+              <stop stopColor="#6366f1" />
               <stop offset="0.325" stopColor="#f97316" />
               <stop offset="1" stopColor="#f97316" stopOpacity="0" />
             </motion.linearGradient>

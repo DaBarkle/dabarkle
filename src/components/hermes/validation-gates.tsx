@@ -45,7 +45,7 @@ export function ValidationGates() {
         {/* Vertical line */}
         <div className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-surface-1">
           <div
-            className="w-full bg-gradient-to-b from-accent-500/50 to-emerald-500/50 transition-all duration-[2000ms] ease-out"
+            className="w-full bg-gradient-to-b from-accent-500/50 to-teal-500/50 transition-all duration-[2000ms] ease-out"
             style={{
               height:
                 animPhase >= 4
@@ -124,7 +124,7 @@ export function ValidationGates() {
                           className="h-5 w-5"
                           fill="none"
                           viewBox="0 0 24 24"
-                          stroke="#34d399"
+                          stroke="#14b8a6"
                           strokeWidth="2.5"
                         >
                           <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
@@ -172,11 +172,29 @@ export function ValidationGates() {
               opacity: animPhase >= 4 ? 1 : 0.2,
               scale: animPhase >= 4 ? 1 : 0.95,
             }}
-            transition={{ duration: 0.5 }}
-            className="relative z-10 overflow-hidden rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-8 py-4 text-center"
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="relative z-10 overflow-hidden rounded-2xl border border-teal-500/30 bg-teal-500/10 px-8 py-5 text-center"
+            style={{
+              boxShadow:
+                animPhase >= 4
+                  ? "0 0 30px rgba(20,184,166,0.15), 0 0 60px rgba(20,184,166,0.05)"
+                  : "none",
+            }}
           >
-            <p className="relative text-3xl font-bold text-emerald-400">100%</p>
-            <p className="relative mt-1 text-sm text-emerald-400/70">Pass Rate</p>
+            {/* Shimmer overlay on completion */}
+            {animPhase >= 4 && (
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(110deg, transparent 30%, rgba(20,184,166,0.08) 50%, transparent 70%)",
+                  backgroundSize: "200% 100%",
+                  animation: "shimmer 3s ease-in-out infinite",
+                }}
+              />
+            )}
+            <p className="relative text-3xl font-bold text-teal-400">100%</p>
+            <p className="relative mt-1 text-sm text-teal-400/70">Pass Rate</p>
           </motion.div>
         </div>
       </div>

@@ -35,7 +35,7 @@ export function BackgroundBeams({ className }: BackgroundBeamsProps) {
           <path
             key={i}
             d={d}
-            stroke={i % 2 === 0 ? "rgba(139,92,246,0.08)" : "rgba(249,115,22,0.05)"}
+            stroke={i % 2 === 0 ? "rgba(99,102,241,0.08)" : "rgba(251,191,36,0.05)"}
             strokeWidth="0.5"
             className="beam-path"
             style={{

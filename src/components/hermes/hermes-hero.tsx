@@ -2,27 +2,26 @@
 
 import { useState, useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { AuroraBackground } from "@/components/shared/aurora-background";
-import { TypewriterEffect } from "@/components/aceternity/typewriter-effect";
-import { Sparkles } from "@/components/aceternity/sparkles";
+import { BackgroundGradientAnimation } from "@/components/aceternity/background-gradient-animation";
+import { TextGenerateEffect } from "@/components/aceternity/text-generate-effect";
 import { metrics } from "@/data/hermes";
 import { springs, easings, fadeUp, fadeScale, staggerContainer } from "@/lib/motion";
 
 const statItems = [
   {
-    value: metrics.documentLines.toLocaleString(),
-    label: "lines maintained",
-    sublabel: "zero manual edits",
+    value: `${metrics.capabilities}`,
+    label: "capabilities",
+    sublabel: "intent-routed",
   },
   {
-    value: metrics.sessions.toString(),
-    label: "sessions completed",
-    sublabel: "zero data loss",
+    value: `${metrics.agents}`,
+    label: "agents",
+    sublabel: "two domains",
   },
   {
-    value: `${metrics.optimizationsApplied}`,
-    label: "self-applied optimizations",
-    sublabel: "zero failures",
+    value: `${metrics.memoryLayers}`,
+    label: "memory layers",
+    sublabel: "continuous capture",
   },
 ];
 
@@ -49,19 +48,16 @@ export function HermesHero() {
 
   return (
     <section className="relative">
-      <AuroraBackground
-        colors={[
-          "rgba(99, 102, 241, 0.35)",
-          "rgba(79, 70, 229, 0.3)",
-          "rgba(249, 115, 22, 0.15)",
-          "rgba(129, 140, 248, 0.25)",
-          "rgba(67, 56, 202, 0.2)",
-        ]}
-        speed={0.7}
-        particles={true}
-        particleCount={60}
-        blur={85}
-        intensity={0.5}
+      <BackgroundGradientAnimation
+        firstColor="99, 102, 241"
+        secondColor="79, 70, 229"
+        thirdColor="129, 140, 248"
+        fourthColor="251, 191, 36"
+        fifthColor="20, 184, 166"
+        pointerColor="99, 102, 241"
+        size="70%"
+        containerOpacity={0.35}
+        glowIntensity={0.45}
         containerClassName="!h-screen"
         className="absolute inset-0 z-10 flex flex-col items-center justify-center"
       >
@@ -94,9 +90,9 @@ export function HermesHero() {
             </a>
           </motion.div>
 
-          {/* Claude badge */}
+          {/* Badge */}
           <motion.div variants={fadeScale} transition={{ duration: 0.5, ease: easings.entrance }}>
-            <span className="mb-8 inline-flex items-center gap-1.5 rounded-full border border-hermes-500/30 bg-hermes-500/10 px-4 py-1.5 text-xs font-medium text-hermes-400 backdrop-blur-sm">
+            <span className="mb-8 inline-flex items-center gap-1.5 rounded-full border border-brand-500/30 bg-brand-500/10 px-4 py-1.5 text-xs font-medium text-brand-400 backdrop-blur-sm">
               Built with Claude &middot; Anthropic
             </span>
           </motion.div>
@@ -110,11 +106,9 @@ export function HermesHero() {
             transition={{ ...springs.smooth, duration: 0.7 }}
             className="mb-6"
           >
-            <Sparkles color="#818cf8" count={10}>
-              <span className="bg-gradient-to-r from-hermes-400 via-hermes-300 to-brand-400 bg-clip-text text-8xl font-bold tracking-tight text-transparent sm:text-9xl md:text-[10rem]">
-                Hermes
-              </span>
-            </Sparkles>
+            <span className="bg-gradient-to-r from-brand-400 via-brand-300 to-accent-400 bg-clip-text text-8xl font-bold tracking-tight text-transparent sm:text-9xl md:text-[10rem]">
+              Hermes
+            </span>
           </motion.h1>
 
           <motion.div
@@ -122,15 +116,9 @@ export function HermesHero() {
             transition={{ duration: 0.5, ease: easings.entrance }}
             className="mb-8"
           >
-            <TypewriterEffect
-              words={[
-                { text: "AI-Powered", className: "text-hermes-400" },
-                { text: "Infrastructure" },
-                { text: "Command" },
-                { text: "Center" },
-              ]}
+            <TextGenerateEffect
+              words="Ambient Intelligence Platform"
               className="!text-lg !font-mono !font-medium tracking-wider sm:!text-xl"
-              cursorClassName="!bg-hermes-500 !h-5"
             />
           </motion.div>
 
@@ -139,8 +127,8 @@ export function HermesHero() {
             transition={{ duration: 0.5, ease: easings.entrance }}
             className="mx-auto max-w-2xl text-lg leading-relaxed text-text-secondary"
           >
-            A self-improving multi-agent system that operates, troubleshoots,
-            and documents a production homelab &mdash; built entirely through
+            A unified platform that continuously learns, routes intent
+            naturally, and acts proactively &mdash; built entirely through
             conversational AI development with Claude Code.
           </motion.p>
 
@@ -155,7 +143,7 @@ export function HermesHero() {
                 variants={fadeUp}
                 whileHover={{ y: -2, scale: 1.02 }}
                 transition={springs.snappy}
-                className="group inline-flex items-baseline gap-2 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-6 py-3 backdrop-blur-xl transition-colors duration-300 hover:border-white/[0.12] hover:shadow-lg hover:shadow-hermes-500/5"
+                className="group inline-flex items-baseline gap-2 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-6 py-3 backdrop-blur-xl transition-colors duration-300 hover:border-white/[0.12] hover:shadow-lg hover:shadow-brand-500/5"
               >
                 <span className="font-mono text-2xl font-bold text-white md:text-3xl">
                   {stat.value}
@@ -194,7 +182,7 @@ export function HermesHero() {
             />
           </svg>
         </motion.div>
-      </AuroraBackground>
+      </BackgroundGradientAnimation>
     </section>
   );
 }
