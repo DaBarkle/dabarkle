@@ -485,13 +485,14 @@ export const metrics = {
   systemUptime: 65,
   capabilities: 9,
   agents: 12,
-  memoryLayers: 3,
+  memoryLayers: 5,
 };
 
 // ============================================================
-// MEMORY SYSTEM — 3 layers
+// MEMORY SYSTEM — 5 capture levels + 5 intelligence layers
 // ============================================================
 
+// Legacy exports (used by old components — remove after migration)
 export interface MemoryLayer {
   id: string;
   level: number;
@@ -501,40 +502,221 @@ export interface MemoryLayer {
   color: string;
 }
 
-export const memoryLayers: MemoryLayer[] = [
+export const memoryLayers: MemoryLayer[] = [];
+export const memoryLifecycle: { step: string; label: string; desc: string; color: string }[] = [];
+
+// --- New memory system data ---
+
+export interface CaptureLevel {
+  id: string;
+  level: string;
+  label: string;
+  tagline: string;
+  description: string;
+  automation: "Automatic" | "Semi-enforced" | "On-demand";
+  llmFree: boolean;
+  color: string;
+  icon: string;
+}
+
+export const captureLevels: CaptureLevel[] = [
   {
-    id: "ambient",
-    level: 1,
-    label: "Ambient Entries",
-    description: "Continuous, lightweight entries written during every substantive interaction.",
-    detail: "Captured automatically — troubleshooting, config changes, decisions, discoveries.",
+    id: "l0",
+    level: "L0",
+    label: "memsearch",
+    tagline: "Per-response summaries",
+    description: "Every response turn is automatically summarized via a Stop hook and written to daily Markdown files. Zero configuration required.",
+    automation: "Automatic",
+    llmFree: false,
     color: "#818cf8",
+    icon: "M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z",
   },
   {
-    id: "journals",
-    level: 2,
-    label: "Session Journals",
-    description: "Comprehensive session summaries with structured frontmatter.",
-    detail: "Written during session-closeout — category, services, tier, unresolved items.",
-    color: "#fbbf24",
-  },
-  {
-    id: "vector",
-    level: 3,
-    label: "Vector Store",
-    description: "Semantic search via Qdrant for 'find anything related to X' queries.",
-    detail: "Embeddings from sessions and ambient entries — grows continuously, pruned by relevance.",
+    id: "l05",
+    level: "L0.5",
+    label: "PostToolUse Logger",
+    tagline: "Per-tool execution capture",
+    description: "Every SSH command, Docker operation, and config edit is logged with significance ratings. Zero LLM dependency.",
+    automation: "Automatic",
+    llmFree: true,
     color: "#14b8a6",
+    icon: "M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z",
+  },
+  {
+    id: "l1",
+    level: "L1",
+    label: "Ambient Memory",
+    tagline: "Rich contextual reasoning",
+    description: "WHY entries capturing decisions, implications, and reasoning. A Stop hook enforcer blocks if major work happens without entries.",
+    automation: "Semi-enforced",
+    llmFree: false,
+    color: "#fbbf24",
+    icon: "M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18",
+  },
+  {
+    id: "l2",
+    level: "L2",
+    label: "Session Journals",
+    tagline: "Session-level summaries",
+    description: "Comprehensive summaries at session end with structured frontmatter. Safety net auto-generates salvage entries if ambient entries were missed.",
+    automation: "On-demand",
+    llmFree: false,
+    color: "#f59e0b",
+    icon: "M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z",
+  },
+  {
+    id: "l3",
+    level: "L3",
+    label: "Vector Store",
+    tagline: "Semantic embeddings in Qdrant",
+    description: "A SessionEnd hook runs hermes-bridge.py to parse all observations, apply 5 intelligence layers, embed with fastembed, and push to Qdrant. Zero LLM dependency.",
+    automation: "Automatic",
+    llmFree: true,
+    color: "#6366f1",
+    icon: "M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125",
   },
 ];
 
-export const memoryLifecycle = [
-  { step: "1", label: "Capture", desc: "Ambient entries written during natural conversation flow", color: "#818cf8" },
-  { step: "2", label: "Consolidate", desc: "Entries rolled up into structured session journals", color: "#fbbf24" },
-  { step: "3", label: "Embed", desc: "Journals vectorized for semantic search via Qdrant", color: "#14b8a6" },
-  { step: "4", label: "Inject", desc: "Context auto-loaded at every session start in under 1 second", color: "#f59e0b" },
-  { step: "5", label: "Prune", desc: "Stale entries archived, old journals rotated, relevance scored", color: "#6366f1" },
+export interface IntelligenceLayer {
+  id: string;
+  index: number;
+  label: string;
+  description: string;
+  example: string;
+  color: string;
+}
+
+export const intelligenceLayers: IntelligenceLayer[] = [
+  {
+    id: "cross-project",
+    index: 1,
+    label: "Cross-Project Correlation",
+    description: "Tags every observation with project scope",
+    example: "hermes, infrastructure, jesse-trading, dabarkle-site",
+    color: "#818cf8",
+  },
+  {
+    id: "infra-enrichment",
+    index: 2,
+    label: "Infrastructure Enrichment",
+    description: "Annotates with dependency chain context",
+    example: "Gluetun change -> Sonarr, Radarr, Prowlarr affected",
+    color: "#14b8a6",
+  },
+  {
+    id: "intent-retrieval",
+    index: 3,
+    label: "Intent-Based Retrieval",
+    description: "Expands search queries using domain aliases",
+    example: '"downloads" -> VPN, SABnzbd, Gluetun, Sonarr',
+    color: "#fbbf24",
+  },
+  {
+    id: "quality-scoring",
+    index: 4,
+    label: "Quality Scoring",
+    description: "Rates observations 1-10 on multiple dimensions",
+    example: "Impact, reversibility, novelty, cross-project scope",
+    color: "#f59e0b",
+  },
+  {
+    id: "pattern-detection",
+    index: 5,
+    label: "Proactive Pattern Detection",
+    description: "Identifies repetition, drift, and dependency risk",
+    example: "11 pattern checks across observation history",
+    color: "#6366f1",
+  },
 ];
+
+export interface MemoryDataFlowStep {
+  step: string;
+  trigger: string;
+  level: string;
+  action: string;
+  color: string;
+}
+
+export const memoryDataFlow: MemoryDataFlowStep[] = [
+  { step: "1", trigger: "User runs SSH", level: "L0", action: "memsearch captures per-response summary", color: "#818cf8" },
+  { step: "2", trigger: "Tool executes", level: "L0.5", action: "PostToolUse logs SSH command with significance", color: "#14b8a6" },
+  { step: "3", trigger: "Decision made", level: "L1", action: "Ambient entry records reasoning and implications", color: "#fbbf24" },
+  { step: "4", trigger: "Session ends", level: "L2", action: "Session journal written with structured summary", color: "#f59e0b" },
+  { step: "5", trigger: "Bridge syncs", level: "L3", action: "5 intelligence layers applied, embedded, pushed to Qdrant", color: "#6366f1" },
+  { step: "6", trigger: "Next session", level: "All", action: "Context auto-injected with patterns and relevant history", color: "#818cf8" },
+];
+
+export interface OpenClawComparison {
+  dimension: string;
+  openClaw: string;
+  hermes: string;
+  shared: boolean;
+}
+
+export const openClawComparisons: OpenClawComparison[] = [
+  {
+    dimension: "Foundation",
+    openClaw: "memsearch plugin for per-turn capture",
+    hermes: "Same memsearch plugin as base layer",
+    shared: true,
+  },
+  {
+    dimension: "Storage Format",
+    openClaw: "Human-readable Markdown files",
+    hermes: "Same Markdown + Qdrant vector store",
+    shared: true,
+  },
+  {
+    dimension: "Capture Depth",
+    openClaw: "4 layers (ephemeral -> daily -> MEMORY.md -> SQLite)",
+    hermes: "5 levels (L0 -> L0.5 -> L1 -> L2 -> L3) with sub-tool granularity",
+    shared: false,
+  },
+  {
+    dimension: "Capture Trigger",
+    openClaw: "Agent must be told to write memories",
+    hermes: "Automatic multi-layer capture on every interaction",
+    shared: false,
+  },
+  {
+    dimension: "Intelligence",
+    openClaw: "Raw text in, raw text out",
+    hermes: "5 enrichment layers applied during sync",
+    shared: false,
+  },
+  {
+    dimension: "Cross-Project",
+    openClaw: "Per-workspace, no cross-project awareness",
+    hermes: "All projects correlated in one vector space",
+    shared: false,
+  },
+  {
+    dimension: "Retrieval",
+    openClaw: "Basic vector similarity search",
+    hermes: "Intent-based expansion with domain aliases",
+    shared: false,
+  },
+  {
+    dimension: "Proactive Analysis",
+    openClaw: "No pattern detection",
+    hermes: "11-check pattern analyzer finds repetition, drift, risk",
+    shared: false,
+  },
+  {
+    dimension: "Sync Pipeline",
+    openClaw: "Embedding API dependency",
+    hermes: "Zero-LLM sync via fastembed + qdrant-client",
+    shared: false,
+  },
+];
+
+export const memoryStats = {
+  captureLevels: 5,
+  intelligenceLayers: 5,
+  vectorsStored: 47,
+  patternChecks: 11,
+  llmSyncDependency: "Zero",
+};
 
 // ============================================================
 // TIERS & ROUTING
@@ -685,7 +867,7 @@ export const timeline: TimelineMilestone[] = [
   { version: "v1.4", label: "Tiered Routing", description: "3-tier complexity routing", date: "Jan 10" },
   { version: "v1.8", label: "3-Gate Validation", description: "Schema + integrity + regression", date: "Feb 7" },
   { version: "v2.0", label: "Living Memory", description: "Session journals + vector search", date: "Mar 1" },
-  { version: "v2.5", label: "Ambient Intelligence", description: "Intent routing + 3-layer memory + self-integration", date: "Mar 14" },
+  { version: "v2.5", label: "Ambient Intelligence", description: "Intent routing + 5-level memory + self-integration", date: "Mar 14" },
 ];
 
 export interface TimelineAnnotation {
@@ -771,7 +953,7 @@ export const builtWithAiCallouts = [
     color: "#818cf8",
   },
   {
-    text: "The ambient intelligence \u2014 intent routing, 3-layer memory, self-integration \u2014 creates a system that genuinely understands context",
+    text: "The ambient intelligence \u2014 intent routing, 5-level memory, self-integration \u2014 creates a system that genuinely understands context",
     color: "#fbbf24",
   },
   {

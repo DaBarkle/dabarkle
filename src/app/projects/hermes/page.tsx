@@ -14,11 +14,11 @@ import { SectionDivider } from "@/components/shared/section-divider";
 export const metadata: Metadata = {
   title: "Hermes -- Ambient Intelligence Platform",
   description:
-    "A unified platform that continuously learns, routes intent naturally, and acts proactively. 12 agents, 9 capabilities, 3-layer memory. Built with Claude Code.",
+    "A unified platform that continuously learns, routes intent naturally, and acts proactively. 12 agents, 9 capabilities, 5-level memory. Built with Claude Code.",
   openGraph: {
     title: "Hermes -- Ambient Intelligence Platform",
     description:
-      "An ambient intelligence system with intent-based routing, 3-layer memory, and self-optimization. Built with Claude.",
+      "An ambient intelligence system with intent-based routing, 5-level memory, and self-optimization. Built with Claude.",
     type: "article",
   },
 };

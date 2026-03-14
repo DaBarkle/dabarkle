@@ -11,7 +11,7 @@ import { springs, easings, fadeUp, staggerContainer } from "@/lib/motion";
 const statPills = [
   { label: "12 Agents", delay: 1.2 },
   { label: "9 Capabilities", delay: 1.4 },
-  { label: "3-Layer Memory", delay: 1.6 },
+  { label: "5-Level Memory", delay: 1.6 },
 ];
 
 export function HeroSection() {
