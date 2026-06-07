@@ -1,7 +1,11 @@
-import { HeroSection } from "@/components/home/hero-section";
-import { AboutSection } from "@/components/home/about-section";
-import { ProjectsSection } from "@/components/home/projects-section";
-import { ContactSection } from "@/components/home/contact-section";
+import { Hero } from "@/components/home/hero";
+import { TrustStrip } from "@/components/home/trust-strip";
+import { Philosophy } from "@/components/home/philosophy";
+import { Capabilities } from "@/components/home/capabilities";
+import { FeaturedWork } from "@/components/home/featured-work";
+import { Approach } from "@/components/home/approach";
+import { Metrics } from "@/components/home/metrics";
+import { Contact } from "@/components/home/contact";
 import { Footer } from "@/components/layout/footer";
 import { SectionDivider } from "@/components/shared/section-divider";
 
@@ -9,14 +13,16 @@ export default function HomePage() {
   return (
     <>
       <main id="main">
-        <section id="hero">
-          <HeroSection />
-        </section>
-        <AboutSection />
+        <Hero />
+        <TrustStrip />
+        <Philosophy />
+        <Capabilities />
+        <SectionDivider variant="brand" />
+        <FeaturedWork />
+        <Approach />
         <SectionDivider variant="mixed" />
-        <ProjectsSection />
-        <SectionDivider variant="accent" />
-        <ContactSection />
+        <Metrics />
+        <Contact />
       </main>
       <Footer />
     </>

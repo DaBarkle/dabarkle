@@ -1,128 +1,135 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { ScrollReveal } from "@/components/shared/scroll-reveal";
-import { SectionHeader } from "@/components/shared/section-header";
+import { Check, Power, ShieldCheck } from "lucide-react";
+import { Section } from "@/components/ui/section";
+import { GlassCard } from "@/components/ui/glass-card";
+import { GradientBadge } from "@/components/ui/gradient-badge";
+import { Reveal } from "@/components/ui/reveal";
 import { selfImprovementSystems, type SelfImprovementSystem } from "@/data/hermes";
+import { alpha, harmonize } from "@/lib/tokens";
 
-function SystemColumn({
-  sys,
-  index,
-}: {
-  sys: SelfImprovementSystem;
-  index: number;
-}) {
+type Tone = "primary" | "neutral" | "success" | "warning";
+
+/** A substrate-level autotuner reads as a "warning"-toned (gold) chip; a
+ *  capability component reads as primary lavender. Single accent either way. */
+function toneFor(system: SelfImprovementSystem): Tone {
+  return system.classification.toLowerCase().includes("substrate") ? "warning" : "primary";
+}
+
+const ROW_KEYS: { key: keyof SelfImprovementSystem; label: string }[] = [
+  { key: "scope", label: "Scope" },
+  { key: "trigger", label: "Trigger" },
+  { key: "observes", label: "Observes" },
+  { key: "actsOn", label: "Acts on" },
+];
+
+function SystemCard({ system }: { system: SelfImprovementSystem }) {
+  const accent = harmonize(system.color);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-30px" }}
-      transition={{ duration: 0.55, delay: 0.08 * index, ease: [0.22, 1, 0.36, 1] }}
-      className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-surface-1 p-6"
-      style={{ boxShadow: `inset 0 0 0 1px ${sys.color}12` }}
-    >
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px"
-        style={{ background: `linear-gradient(90deg, transparent, ${sys.color}88, transparent)` }} />
-
-      <div className="mb-5 flex items-center justify-between">
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-widest" style={{ color: sys.color }}>
-            {sys.classification}
-          </p>
-          <h3 className="mt-0.5 font-mono text-xl font-semibold text-white">{sys.label}</h3>
+    <GlassCard tone="strong" className="flex h-full flex-col overflow-hidden">
+      {/* Header */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline px-5 py-4 sm:px-6">
+        <div className="flex items-center gap-2.5">
+          <span
+            aria-hidden
+            className="h-1.5 w-1.5 shrink-0 rounded-full"
+            style={{ backgroundColor: accent, boxShadow: `0 0 8px ${alpha(accent, 0.6)}` }}
+          />
+          <h3 className="font-mono text-sm font-medium text-white">{system.label}</h3>
         </div>
-        <span
-          className="rounded-full border px-2.5 py-0.5 text-[10px] uppercase tracking-widest"
-          style={{
-            borderColor: `${sys.color}33`,
-            color: sys.color,
-            backgroundColor: `${sys.color}0d`,
-          }}
-        >
-          {sys.id === "closeout-optimizer" ? "Capability" : "Substrate"}
-        </span>
+        <GradientBadge tone={toneFor(system)}>{system.classification}</GradientBadge>
       </div>
 
-      <FactRow label="Scope" value={sys.scope} />
-      <FactRow label="Trigger" value={sys.trigger} />
-      <FactRow label="Observes" value={sys.observes} mono />
-      <FactRow label="Acts on" value={sys.actsOn} />
+      {/* Labelled rows */}
+      <dl className="divide-y divide-hairline border-b border-hairline">
+        {ROW_KEYS.map(({ key, label }) => (
+          <div key={key} className="px-5 py-3.5 sm:px-6">
+            <dt className="font-mono text-[10px] uppercase tracking-widest text-text-tertiary">
+              {label}
+            </dt>
+            <dd className="mt-1.5 text-sm leading-relaxed text-text-secondary">
+              {system[key] as string}
+            </dd>
+          </div>
+        ))}
+      </dl>
 
-      <div className="mt-5">
-        <p className="mb-2 font-mono text-[10.5px] uppercase tracking-widest text-text-tertiary">
-          Guardrails
-        </p>
-        <ul className="space-y-1.5">
-          {sys.guardrails.map((g) => (
-            <li key={g} className="flex items-start gap-2 text-[12px] text-text-secondary">
-              <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full" style={{ backgroundColor: sys.color }} />
-              <span>{g}</span>
+      {/* Guardrails */}
+      <div className="px-5 py-4 sm:px-6">
+        <div className="mb-3 flex items-center gap-2">
+          <ShieldCheck className="h-3.5 w-3.5 text-brand-300" aria-hidden />
+          <span className="font-mono text-[10px] uppercase tracking-widest text-text-tertiary">
+            Guardrails
+          </span>
+        </div>
+        <ul className="space-y-2.5">
+          {system.guardrails.map((g) => (
+            <li key={g} className="flex items-start gap-2.5">
+              <Check
+                className="mt-0.5 h-3.5 w-3.5 shrink-0"
+                style={{ color: accent }}
+                aria-hidden
+              />
+              <span className="text-sm leading-relaxed text-text-secondary">{g}</span>
             </li>
           ))}
         </ul>
       </div>
 
-      <div className="mt-5 grid grid-cols-3 gap-2">
-        {sys.stats.map((s) => (
-          <div
-            key={s.label}
-            className="rounded-lg border border-white/[0.05] bg-bg/40 p-2.5 text-center"
-          >
-            <div className="font-mono text-base font-bold text-white">{s.value}</div>
-            <div className="mt-0.5 text-[10px] text-text-tertiary">{s.label}</div>
-          </div>
-        ))}
-      </div>
+      {/* Stats + kill switch — pinned to base so the two columns stay parallel */}
+      <div className="mt-auto border-t border-hairline px-5 py-4 sm:px-6">
+        <ul className="flex flex-wrap gap-2">
+          {system.stats.map((s) => (
+            <li
+              key={s.label}
+              className="inline-flex items-baseline gap-1.5 rounded-full border border-hairline bg-white/[0.03] px-3 py-1"
+            >
+              <span className="font-mono text-xs font-semibold text-white">{s.value}</span>
+              <span className="text-[11px] text-text-tertiary">{s.label}</span>
+            </li>
+          ))}
+        </ul>
 
-      <div className="mt-4 rounded-lg border border-white/[0.05] bg-bg/40 p-2.5">
-        <p className="font-mono text-[10.5px] text-text-muted">
-          Kill switch: <span className="text-text-secondary">{sys.killSwitch}</span>
-        </p>
+        <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
+          <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-text-tertiary">
+            <Power className="h-3 w-3" aria-hidden />
+            Kill switch
+          </span>
+          <code className="w-fit rounded border border-hairline bg-black/30 px-2 py-1 font-mono text-[11px] text-brand-200">
+            {system.killSwitch}
+          </code>
+        </div>
       </div>
-    </motion.div>
-  );
-}
-
-function FactRow({ label, value, mono = false }: { label: string; value: string; mono?: boolean }) {
-  return (
-    <div className="mb-3 last:mb-0">
-      <p className="font-mono text-[10.5px] uppercase tracking-widest text-text-muted">{label}</p>
-      <p className={`text-sm leading-relaxed text-text-secondary ${mono ? "font-mono text-[12px]" : ""}`}>
-        {value}
-      </p>
-    </div>
+    </GlassCard>
   );
 }
 
 export function SelfImprovementTwoSystems() {
   return (
-    <section className="relative overflow-hidden bg-bg py-24 sm:py-32">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <ScrollReveal>
-          <SectionHeader
-            overline="Self-improvement"
-            title="Two systems, never conflated"
-            subtitle="One improves the documentation pipeline. The other improves the substrate itself. They have different triggers, different scopes, and very different guardrails — and they must never be mistaken for each other."
-            centered
-          />
-        </ScrollReveal>
-
-        <div className="mt-14 grid grid-cols-1 gap-4 lg:grid-cols-2">
-          {selfImprovementSystems.map((sys, i) => (
-            <SystemColumn key={sys.id} sys={sys} index={i} />
-          ))}
+    <Section
+      id="self-improvement"
+      eyebrow="Self-improvement"
+      title="Two systems, never conflated"
+      lede="Hermes improves itself through two architecturally separate systems — one tunes the documentation pipeline, the other observes the substrate. They never touch each other's domain."
+    >
+      <div className="relative grid gap-6 md:grid-cols-2">
+        {/* Center "vs" separator — desktop only, marks the boundary between domains */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-6 left-1/2 hidden -translate-x-1/2 md:flex md:flex-col md:items-center"
+        >
+          <div className="w-px flex-1 bg-gradient-to-b from-transparent via-hairline-strong to-transparent" />
+          <span className="my-2 flex h-8 w-8 items-center justify-center rounded-full border border-hairline bg-surface-1/80 font-mono text-[10px] uppercase tracking-widest text-text-muted backdrop-blur-sm">
+            vs
+          </span>
+          <div className="w-px flex-1 bg-gradient-to-b from-transparent via-hairline-strong to-transparent" />
         </div>
 
-        <ScrollReveal delay={0.1} className="mt-8">
-          <div className="rounded-xl border border-white/[0.06] bg-surface-1 p-5 text-center">
-            <p className="text-sm text-text-secondary">
-              Capabilities do work on behalf of the operator. The substrate is what decides{" "}
-              <em className="text-white">how</em> that work gets done. Mixing them up breaks the
-              ambient-intelligence vision — universal, automatic, zero-maintenance, invisible.
-            </p>
-          </div>
-        </ScrollReveal>
+        {selfImprovementSystems.map((system, i) => (
+          <Reveal key={system.id} direction="up" delay={i * 0.1}>
+            <SystemCard system={system} />
+          </Reveal>
+        ))}
       </div>
-    </section>
+    </Section>
   );
 }

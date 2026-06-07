@@ -1,83 +1,88 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { ScrollReveal } from "@/components/shared/scroll-reveal";
-import { SectionHeader } from "@/components/shared/section-header";
-import { bentoTiles } from "@/data/hermes";
+import { Section } from "@/components/ui/section";
+import { BentoGrid, BentoCell } from "@/components/ui/bento";
+import { Reveal } from "@/components/ui/reveal";
+import { harmonize } from "@/lib/tokens";
 import { cn } from "@/lib/utils";
+import { bentoTiles, type BentoTile } from "@/data/hermes";
 
-function Tile({
-  tile,
-  index,
-  className,
-}: {
-  tile: (typeof bentoTiles)[number];
-  index: number;
-  className?: string;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.55, delay: 0.06 * index, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ y: -3 }}
-      className={cn(
-        "group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/[0.06] bg-surface-1 p-6 transition-colors duration-300 hover:border-white/[0.14]",
-        className,
-      )}
-    >
-      <div
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        style={{
-          background: `radial-gradient(600px circle at 80% 0%, ${tile.color}1c, transparent 60%)`,
-        }}
-      />
-      <div className="relative">
-        <div
-          className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl"
-          style={{
-            backgroundColor: `${tile.color}1a`,
-            color: tile.color,
-            boxShadow: `inset 0 0 0 1px ${tile.color}30`,
-          }}
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-5 w-5">
-            <path strokeLinecap="round" strokeLinejoin="round" d={tile.iconPath} />
-          </svg>
-        </div>
-        <h3 className="mb-2 text-lg font-semibold text-white">{tile.title}</h3>
-        <p className="text-sm leading-relaxed text-text-secondary">{tile.recruiterLine}</p>
-      </div>
-      <div className="relative mt-5 border-t border-white/[0.04] pt-4">
-        <p className="font-mono text-[11px] leading-relaxed text-text-muted">{tile.technicalLine}</p>
-      </div>
-    </motion.div>
-  );
+/**
+ * Span map. The 6 tiles (2 large + 4 medium, in source order
+ * [L, M, M, M, M, L]) tile cleanly across the 6-col bento grid:
+ *   row 1 → large(4) + medium(2)
+ *   row 2 → medium(2) + medium(2) + medium(2)
+ *   row 3 → large(6) full-width finale
+ * so the final large reads as a deliberate closing statement rather
+ * than leaving an awkward gap.
+ */
+function spanFor(tile: BentoTile, index: number, total: number): string {
+  if (tile.size === "large") {
+    return index === total - 1 ? "md:col-span-6" : "md:col-span-4";
+  }
+  return "md:col-span-2";
 }
 
 export function WhatItDoesBento() {
-  return (
-    <section className="relative bg-bg py-24 sm:py-32">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <ScrollReveal>
-          <SectionHeader
-            overline="What it does"
-            title="One system, every domain"
-            subtitle="The system pillars — what an operator actually gets from running Hermes day to day. Recruiter top line · technical detail below."
-            centered
-          />
-        </ScrollReveal>
+  const total = bentoTiles.length;
 
-        <div className="mt-14 grid grid-cols-1 gap-4 md:grid-cols-3 md:auto-rows-fr">
-          <Tile tile={bentoTiles[0]} index={0} className="md:col-span-2" />
-          <Tile tile={bentoTiles[1]} index={1} />
-          <Tile tile={bentoTiles[2]} index={2} />
-          <Tile tile={bentoTiles[3]} index={3} />
-          <Tile tile={bentoTiles[4]} index={4} />
-          <Tile tile={bentoTiles[5]} index={5} className="md:col-span-2" />
-        </div>
-      </div>
-    </section>
+  return (
+    <Section
+      id="what-it-does"
+      eyebrow="What it does"
+      title="One system, many capabilities"
+      lede="Every domain is a capability of one intelligent system — not a separate tool to invoke."
+    >
+      <Reveal direction="up">
+        <BentoGrid>
+          {bentoTiles.map((tile, i) => {
+            const accent = harmonize(tile.color);
+            return (
+              <BentoCell key={tile.id} glow="rgba(94,105,210,0.16)" span={spanFor(tile, i, total)}>
+                <div className="flex h-full flex-col gap-4 p-6 sm:p-7">
+                  {/* icon chip */}
+                  <span
+                    aria-hidden="true"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-soft ring-1 ring-inset ring-[rgba(94,105,210,0.25)]"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.5}
+                      className="h-5 w-5 text-brand-300"
+                      aria-hidden="true"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d={tile.iconPath} />
+                    </svg>
+                  </span>
+
+                  {/* title + recruiter line */}
+                  <div className="flex flex-col gap-2">
+                    <h3 className="flex items-start gap-2.5 text-base font-semibold leading-snug text-white sm:text-lg">
+                      <span
+                        aria-hidden="true"
+                        className="mt-[0.5em] h-1.5 w-1.5 shrink-0 rounded-full"
+                        style={{ backgroundColor: accent }}
+                      />
+                      <span>{tile.title}</span>
+                    </h3>
+                    <p className="text-sm leading-relaxed text-text-secondary">{tile.recruiterLine}</p>
+                  </div>
+
+                  {/* technical detail chip — pinned to the bottom edge */}
+                  <p
+                    className={cn(
+                      "mt-auto rounded-lg border border-hairline bg-white/[0.025] px-3 py-2",
+                      "font-mono text-[11px] leading-relaxed text-text-tertiary",
+                    )}
+                  >
+                    {tile.technicalLine}
+                  </p>
+                </div>
+              </BentoCell>
+            );
+          })}
+        </BentoGrid>
+      </Reveal>
+    </Section>
   );
 }

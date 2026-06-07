@@ -1,74 +1,52 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 
+/**
+ * AmbientLayer — a soft lavender spotlight that eases toward the cursor on
+ * desktop, adding life and depth to the dark canvas. Pointer-coarse and
+ * reduced-motion users simply get no listeners (the div stays transparent; the
+ * SiteBackground already carries the base grain/vignette). Driven via rAF +
+ * direct style writes — no React re-renders.
+ */
 export function AmbientLayer() {
-  const [visible, setVisible] = useState(false);
-  const displayX = useRef(0);
-  const displayY = useRef(0);
-  const targetX = useRef(0);
-  const targetY = useRef(0);
-  const divRef = useRef<HTMLDivElement>(null);
-  const frameRef = useRef<number>(0);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const isTouch = window.matchMedia("(pointer: coarse)").matches;
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (coarse || reduced) return;
 
-    if (isTouch || reducedMotion) return;
+    const pos = { x: window.innerWidth / 2, y: window.innerHeight * 0.25 };
+    const target = { ...pos };
+    let raf = 0;
 
-    setVisible(true);
-
-    function handleMouseMove(e: MouseEvent) {
-      targetX.current = e.clientX;
-      targetY.current = e.clientY;
+    function onMove(e: MouseEvent) {
+      target.x = e.clientX;
+      target.y = e.clientY;
     }
-
     function tick() {
-      displayX.current += (targetX.current - displayX.current) * 0.08;
-      displayY.current += (targetY.current - displayY.current) * 0.08;
-      if (divRef.current) {
-        divRef.current.style.background = `radial-gradient(400px circle at ${displayX.current}px ${displayY.current}px, rgba(99,102,241,0.10), transparent 60%)`;
+      pos.x += (target.x - pos.x) * 0.08;
+      pos.y += (target.y - pos.y) * 0.08;
+      if (ref.current) {
+        ref.current.style.background = `radial-gradient(520px circle at ${pos.x}px ${pos.y}px, rgba(94,105,210,0.10), transparent 65%)`;
       }
-      frameRef.current = requestAnimationFrame(tick);
+      raf = requestAnimationFrame(tick);
     }
 
-    frameRef.current = requestAnimationFrame(tick);
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-
+    window.addEventListener("mousemove", onMove, { passive: true });
+    raf = requestAnimationFrame(tick);
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      cancelAnimationFrame(frameRef.current);
+      window.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(raf);
     };
   }, []);
 
   return (
-    <>
-      {visible && (
-        <div
-          ref={divRef}
-          aria-hidden="true"
-          className="pointer-events-none fixed inset-0 z-30"
-        />
-      )}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-40 h-full w-full opacity-[0.04]"
-      >
-        <svg width="100%" height="100%">
-          <filter id="noise">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.65"
-              numOctaves="3"
-              stitchTiles="stitch"
-            />
-          </filter>
-          <rect width="100%" height="100%" filter="url(#noise)" />
-        </svg>
-      </div>
-    </>
+    <div
+      ref={ref}
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 z-[5] hidden md:block"
+    />
   );
 }

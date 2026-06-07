@@ -1,118 +1,86 @@
-"use client";
-
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import { ScrollReveal } from "@/components/shared/scroll-reveal";
-import { SectionHeader } from "@/components/shared/section-header";
-import { CountUp } from "@/components/shared/count-up";
-import { GridBackground } from "@/components/aceternity/grid-background";
-import { systemMetrics, metrics } from "@/data/hermes";
-
-function MetricTile({
-  m,
-  index,
-  inView,
-}: {
-  m: (typeof systemMetrics)[number];
-  index: number;
-  inView: boolean;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: 0.04 * index, ease: [0.22, 1, 0.36, 1] }}
-      className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-surface-1 p-5 transition-colors hover:border-white/[0.14]"
-    >
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-px"
-        style={{ background: `linear-gradient(90deg, transparent, ${m.color}55, transparent)` }}
-      />
-
-      <div className="flex items-baseline gap-2">
-        <span className="font-mono text-4xl font-bold tabular-nums" style={{ color: m.color }}>
-          {inView ? <CountUp value={m.value} duration={1.4} /> : "0"}
-        </span>
-        {m.suffix && <span className="font-mono text-xl text-text-tertiary">{m.suffix}</span>}
-      </div>
-      <div className="mt-1 text-sm font-semibold text-white">{m.label}</div>
-      <div className="mt-0.5 text-[11px] leading-snug text-text-tertiary">{m.caption}</div>
-    </motion.div>
-  );
-}
-
-function FootnoteCard({
-  label,
-  value,
-  detail,
-  color,
-  isString,
-}: {
-  label: string;
-  value: number | string;
-  detail: string;
-  color: string;
-  isString?: boolean;
-}) {
-  return (
-    <div className="rounded-2xl border border-white/[0.06] bg-surface-1 p-4">
-      <p className="font-mono text-[10px] uppercase tracking-widest text-text-muted">{label}</p>
-      <p className="mt-1 font-mono text-2xl font-bold" style={{ color }}>
-        {isString ? value : <CountUp value={value as number} />}
-      </p>
-      <p className="mt-1 text-[11px] text-text-tertiary">{detail}</p>
-    </div>
-  );
-}
+import { Section } from "@/components/ui/section";
+import { GlassCard } from "@/components/ui/glass-card";
+import { StatCard } from "@/components/ui/stat-card";
+import { CountUp } from "@/components/ui/count-up";
+import { GradientBadge } from "@/components/ui/gradient-badge";
+import { Reveal } from "@/components/ui/reveal";
+import { systemMetrics, metrics, type SystemMetric } from "@/data/hermes";
+import { harmonize, color } from "@/lib/tokens";
 
 export function MetricsDashboard() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
   return (
-    <section className="relative overflow-hidden bg-bg py-24 sm:py-32">
-      <GridBackground variant="grid" gridSize={64} color="rgba(255,255,255,0.018)">
-        <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
-          <ScrollReveal>
-            <SectionHeader
-              overline="By the numbers"
-              title="Where the system stands today"
-              subtitle="Hermes ships with breadth. Every metric below is registered, monitored, and surfaced through the same ambient memory stack that powers the rest of the system."
-              centered
-            />
-          </ScrollReveal>
-
-          <div ref={ref} className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-            {systemMetrics.map((m, i) => (
-              <MetricTile key={m.id} m={m} index={i} inView={inView} />
-            ))}
+    <Section
+      id="metrics"
+      eyebrow="By the numbers"
+      title="A system at a glance"
+      lede="Current figures from a platform that runs every day across a homelab, two networks, banking, voice and design."
+      align="center"
+    >
+      {/* Hero highlight — one confident headline metric */}
+      <Reveal direction="up">
+        <GlassCard
+          tone="strong"
+          gradientBorder
+          className="mx-auto flex max-w-3xl flex-col items-center gap-5 px-6 py-9 text-center sm:flex-row sm:justify-center sm:gap-8 sm:px-10 sm:text-left"
+        >
+          <div className="flex flex-col items-center sm:items-start">
+            <span className="font-mono text-[11px] uppercase tracking-widest text-brand-300">
+              Days live, in continuous use
+            </span>
+            <div className="mt-2 text-[3.25rem] font-semibold leading-none tracking-tight text-white sm:text-[4rem]">
+              <CountUp value={metrics.daysRunning} suffix="+" />
+            </div>
           </div>
 
-          <ScrollReveal delay={0.2} className="mt-10">
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-              <FootnoteCard
-                label="Days running"
-                value={metrics.daysRunning}
-                detail="Continuous ambient capture since first session"
-                color="#34d399"
-              />
-              <FootnoteCard
-                label="As-built version"
-                value={metrics.asbuiltVersion}
-                detail="Maintained by the closeout pipeline"
-                color="#fbbf24"
-                isString
-              />
-              <FootnoteCard
-                label="Failed deployments"
-                value={0}
-                detail="Optimizer + bridge + Stage shipped clean"
-                color="#818cf8"
-              />
-            </div>
-          </ScrollReveal>
-        </div>
-      </GridBackground>
-    </section>
+          <span aria-hidden="true" className="hidden h-14 w-px bg-hairline sm:block" />
+
+          <div className="flex flex-col items-center gap-2.5 sm:items-start">
+            <GradientBadge tone="success">As-built {metrics.asbuiltVersion}</GradientBadge>
+            <p className="max-w-xs text-pretty text-sm leading-relaxed text-text-secondary">
+              One operator, one assistant — self-documenting, self-maintaining, and still
+              shipping new capabilities every week.
+            </p>
+          </div>
+        </GlassCard>
+      </Reveal>
+
+      {/* Metric grid */}
+      <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {systemMetrics.map((m: SystemMetric, i: number) => {
+          const accent = harmonize(m.color);
+          return (
+            <Reveal key={m.id} direction="up" delay={(i % 4) * 0.06}>
+              <div className="relative h-full">
+                {/* Thin top accent rail — the only data-colour surface, kept hairline-scale */}
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-5 top-0 z-10 h-px rounded-full opacity-70 sm:inset-x-6"
+                  style={{ background: accent }}
+                />
+                <StatCard
+                  value={m.value}
+                  label={m.label}
+                  caption={m.caption}
+                  suffix={m.suffix}
+                  accent={accent}
+                  className="h-full"
+                />
+              </div>
+            </Reveal>
+          );
+        })}
+      </div>
+
+      <Reveal direction="up" delay={0.1}>
+        <p className="mt-8 text-center font-mono text-[11px] uppercase tracking-widest text-text-tertiary">
+          <span
+            aria-hidden="true"
+            className="mr-2 inline-block h-1.5 w-1.5 -translate-y-px rounded-full align-middle"
+            style={{ background: color.primary }}
+          />
+          Figures reflect current system state — privacy-safe, no live infrastructure detail
+        </p>
+      </Reveal>
+    </Section>
   );
 }

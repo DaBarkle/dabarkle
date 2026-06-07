@@ -1,13 +1,11 @@
-import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Geist } from "next/font/google";
-import { Nav } from "@/components/layout/nav";
+import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono } from "next/font/google";
+import { FloatingNav } from "@/components/layout/floating-nav";
 import { MobileMenu } from "@/components/layout/mobile-menu";
 import { AmbientLayer } from "@/components/layout/ambient-layer";
+import { SiteBackground } from "@/components/visuals/site-background";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
-import { cn } from "@/lib/utils";
-
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const inter = Inter({
   variable: "--font-inter",
@@ -21,16 +19,52 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const SITE_URL = "https://dabarkle.vercel.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "DaBarkle — AI Harness Builder",
-    template: "%s | DaBarkle",
+    template: "%s · DaBarkle",
   },
   description:
-    "I build the scaffolding around AI — memory, routing, guardrails, interfaces. Portfolio of DaBarkle, builder and operator of Hermes, an ambient intelligence platform.",
-  icons: {
-    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>",
+    "I build the scaffolding around AI — memory, routing, guardrails, interfaces. Portfolio of David Barker (DaBarkle), builder and operator of Hermes, an ambient intelligence platform.",
+  keywords: [
+    "AI harness",
+    "ambient intelligence",
+    "Hermes",
+    "Claude Code",
+    "agent orchestration",
+    "homelab",
+    "MCP",
+    "David Barker",
+    "DaBarkle",
+  ],
+  authors: [{ name: "David Barker", url: SITE_URL }],
+  creator: "David Barker",
+  alternates: { canonical: SITE_URL },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: "DaBarkle",
+    title: "DaBarkle — AI Harness Builder",
+    description:
+      "Not just a user of AI — an operator of it. Builder of Hermes, an ambient intelligence platform: 15 agents, 22 MCP servers, structural credential security, 5-level memory.",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "DaBarkle — AI Harness Builder",
+    description:
+      "Builder and operator of Hermes, an ambient intelligence platform. Memory, routing, guardrails, generative UI.",
+  },
+  icons: {
+    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88' fill='%235e6ad2'>✦</text></svg>",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#060608",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({
@@ -39,21 +73,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable)}>
-      <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
-      >
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+      <body className="font-sans antialiased">
         <a
           href="#main"
-          className="absolute left-[-9999px] top-auto w-[1px] h-[1px] overflow-hidden focus:fixed focus:top-4 focus:left-4 focus:w-auto focus:h-auto focus:p-2 focus:px-4 focus:bg-surface-1 focus:text-white focus:rounded-lg focus:z-[9999] focus:text-sm focus:font-medium focus:outline-2 focus:outline-accent-500"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[9999] focus:rounded-lg focus:bg-surface-2 focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white focus:outline-2 focus:outline-primary"
         >
           Skip to content
         </a>
         <TooltipProvider>
-          <Nav />
+          {/* Global layered ambient base (behind all content) */}
+          <SiteBackground />
+          <FloatingNav />
           <MobileMenu />
+          {/* Cursor-reactive spotlight + grain (desktop, motion-safe) */}
           <AmbientLayer />
-          {children}
+          <div className="relative z-10">{children}</div>
         </TooltipProvider>
       </body>
     </html>

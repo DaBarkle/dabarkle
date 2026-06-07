@@ -1,407 +1,132 @@
-"use client";
-
-import { useRef, useState, useEffect } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
-import { ScrollReveal } from "@/components/shared/scroll-reveal";
-import { SectionHeader } from "@/components/shared/section-header";
-import { CardSpotlight } from "@/components/aceternity/card-spotlight";
-import { Spotlight } from "@/components/aceternity/spotlight";
+import { ChevronRight } from "lucide-react";
+import { Section } from "@/components/ui/section";
+import { GlassCard } from "@/components/ui/glass-card";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { guardrails, gates } from "@/data/hermes";
-import { fadeUp, staggerContainer } from "@/lib/motion";
+import { alpha, harmonize } from "@/lib/tokens";
 
 export function SafetyGuardrails() {
-  const gatesRef = useRef<HTMLDivElement>(null);
-  const gatesInView = useInView(gatesRef, { once: true, margin: "-80px" });
-  const prefersReducedMotion = useReducedMotion();
-  const [gateChecks, setGateChecks] = useState<boolean[]>([false, false, false]);
-
-  useEffect(() => {
-    if (!gatesInView || prefersReducedMotion) {
-      if (gatesInView && prefersReducedMotion) {
-        setGateChecks([true, true, true]);
-      }
-      return;
-    }
-    const timers = gates.map((_, i) =>
-      setTimeout(() => {
-        setGateChecks((prev) => {
-          const next = [...prev];
-          next[i] = true;
-          return next;
-        });
-      }, 800 + i * 600)
-    );
-    return () => timers.forEach(clearTimeout);
-  }, [gatesInView, prefersReducedMotion]);
-
   return (
-    <section className="relative overflow-hidden bg-bg py-24 sm:py-32">
-      <Spotlight
-        className="min-h-full"
-        fill="rgba(99, 102, 241, 0.06)"
-      >
-        <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6">
-          <SectionHeader
-            overline="Safety First"
-            title="Defense in Depth"
-            subtitle="Five layers of protection ensure the system operates within strict safety bounds."
-          />
-
-          {/* Guardrail cards - staggered layout */}
-          <motion.div
-            className="mb-20 mt-10 sm:mt-16"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-          >
-            {/* Top row: 3 cards */}
-            <div className="grid gap-4 sm:grid-cols-3">
-              {guardrails.slice(0, 3).map((guard, i) => (
-                <motion.div key={guard.id} variants={fadeUp}>
-                  <CardSpotlight
-                    className="h-full"
-                    spotlightColor={`${guard.color}12`}
+    <Section
+      id="safety"
+      eyebrow="Safety"
+      title="Confidence comes from constraints"
+      lede="Risky operations are gated, credentials are unreachable, and every documentation update passes a three-gate validation before it lands."
+    >
+      {/* Guardrails grid */}
+      <Stagger className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {guardrails.map((g) => {
+          const accent = harmonize(g.color);
+          return (
+            <StaggerItem key={g.id}>
+              <GlassCard interactive className="flex h-full flex-col p-5 sm:p-6">
+                <span
+                  aria-hidden="true"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft ring-1 ring-inset ring-hairline"
+                  style={{ color: accent }}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    className="h-5 w-5"
                   >
-                    <div className="p-5">
-                      <div className="mb-3 flex items-center gap-3">
-                        <div
-                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
-                          style={{
-                            background: `${guard.color}15`,
-                          }}
-                        >
-                          <svg
-                            className="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke={guard.color}
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d={guard.icon}
-                            />
-                          </svg>
-                        </div>
-                        <h4
-                          className="text-sm font-semibold"
-                          style={{ color: guard.color }}
-                        >
-                          {guard.title}
-                        </h4>
-                      </div>
-                      <p className="mb-3 text-xs leading-relaxed text-text-secondary">
-                        {guard.description}
-                      </p>
-                      <div
-                        className="rounded-lg px-3 py-2"
-                        style={{
-                          background: `${guard.color}08`,
-                          borderLeft: `2px solid ${guard.color}40`,
-                        }}
-                      >
-                        <p className="text-[11px] leading-relaxed text-text-muted">
-                          {guard.detail}
-                        </p>
-                      </div>
-                    </div>
-                  </CardSpotlight>
-                </motion.div>
-              ))}
-            </div>
+                    <path strokeLinecap="round" strokeLinejoin="round" d={g.icon} />
+                  </svg>
+                </span>
 
-            {/* Bottom row: 2 cards centered */}
-            <div className="mt-4 grid gap-4 sm:grid-cols-2 sm:mx-auto sm:max-w-[66.666%]">
-              {guardrails.slice(3, 5).map((guard) => (
-                <motion.div key={guard.id} variants={fadeUp}>
-                  <CardSpotlight
-                    className="h-full"
-                    spotlightColor={`${guard.color}12`}
-                  >
-                    <div className="p-5">
-                      <div className="mb-3 flex items-center gap-3">
-                        <div
-                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
-                          style={{
-                            background: `${guard.color}15`,
-                          }}
-                        >
-                          <svg
-                            className="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke={guard.color}
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d={guard.icon}
-                            />
-                          </svg>
-                        </div>
-                        <h4
-                          className="text-sm font-semibold"
-                          style={{ color: guard.color }}
-                        >
-                          {guard.title}
-                        </h4>
-                      </div>
-                      <p className="mb-3 text-xs leading-relaxed text-text-secondary">
-                        {guard.description}
-                      </p>
-                      <div
-                        className="rounded-lg px-3 py-2"
-                        style={{
-                          background: `${guard.color}08`,
-                          borderLeft: `2px solid ${guard.color}40`,
-                        }}
-                      >
-                        <p className="text-[11px] leading-relaxed text-text-muted">
-                          {guard.detail}
-                        </p>
-                      </div>
-                    </div>
-                  </CardSpotlight>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+                <h3 className="mt-4 text-base font-semibold leading-snug text-white">
+                  {g.title}
+                </h3>
 
-          {/* Validation Gates Pipeline */}
-          <div ref={gatesRef}>
-            <ScrollReveal>
-              <h3 className="mb-2 text-center text-h3 text-white">
-                3-Gate Validation Pipeline
-              </h3>
-              <p className="mb-8 text-center text-sm text-text-tertiary">
-                Every document update must pass all three gates before being committed.
-              </p>
-            </ScrollReveal>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-text-secondary">
+                  {g.description}
+                </p>
 
-            {/* Desktop: horizontal pipeline */}
-            <div className="hidden sm:block">
-              <ScrollReveal delay={0.2}>
-                <div className="mx-auto flex max-w-3xl items-center justify-center gap-0">
-                  {gates.map((gate, i) => (
-                    <div key={gate.id} className="flex items-center">
-                      {/* Gate card */}
-                      <div
-                        className="relative flex w-56 flex-col items-center rounded-xl border p-5 transition-all duration-500"
-                        style={{
-                          borderColor: gateChecks[i]
-                            ? `${gate.color}50`
-                            : "rgba(255,255,255,0.06)",
-                          background: gateChecks[i]
-                            ? `${gate.color}08`
-                            : "rgba(255,255,255,0.01)",
-                          boxShadow: gateChecks[i]
-                            ? `0 0 20px ${gate.color}15`
-                            : "none",
-                        }}
-                      >
-                        {/* Check mark */}
-                        <div
-                          className="mb-3 flex h-10 w-10 items-center justify-center rounded-full transition-all duration-500"
-                          style={{
-                            background: gateChecks[i]
-                              ? `${gate.color}20`
-                              : "rgba(255,255,255,0.03)",
-                            boxShadow: gateChecks[i]
-                              ? `0 0 16px ${gate.color}30`
-                              : "none",
-                          }}
-                        >
-                          {gateChecks[i] ? (
-                            <motion.svg
-                              className="h-5 w-5"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              initial={{ scale: 0, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
-                              transition={{
-                                type: "spring",
-                                stiffness: 400,
-                                damping: 15,
-                              }}
-                            >
-                              <motion.path
-                                d="M5 13l4 4L19 7"
-                                stroke={gate.color}
-                                strokeWidth={2.5}
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                initial={{ pathLength: 0 }}
-                                animate={{ pathLength: 1 }}
-                                transition={{
-                                  duration: 0.4,
-                                  ease: "easeOut",
-                                }}
-                              />
-                            </motion.svg>
-                          ) : (
-                            <span
-                              className="text-xs font-bold"
-                              style={{ color: "rgba(255,255,255,0.2)" }}
-                            >
-                              {i + 1}
-                            </span>
-                          )}
-                        </div>
-
-                        <h4
-                          className="mb-1 text-sm font-semibold transition-colors duration-500"
-                          style={{
-                            color: gateChecks[i]
-                              ? gate.color
-                              : "rgba(255,255,255,0.4)",
-                          }}
-                        >
-                          {gate.shortName}
-                        </h4>
-                        <p className="text-center text-[10px] text-text-muted">
-                          {gate.validates.length} validations
-                        </p>
-                      </div>
-
-                      {/* Arrow connector */}
-                      {i < gates.length - 1 && (
-                        <div className="flex w-12 items-center justify-center">
-                          <motion.div
-                            className="flex items-center"
-                            initial={{ opacity: 0.15 }}
-                            animate={{
-                              opacity: gateChecks[i] ? 0.6 : 0.15,
-                            }}
-                            transition={{ duration: 0.5 }}
-                          >
-                            <div
-                              className="h-px w-6"
-                              style={{
-                                background: gateChecks[i]
-                                  ? gate.color
-                                  : "rgba(255,255,255,0.1)",
-                              }}
-                            />
-                            <svg
-                              className="h-3 w-3 -ml-0.5"
-                              viewBox="0 0 12 12"
-                              fill="none"
-                            >
-                              <path
-                                d="M4 2l4 4-4 4"
-                                stroke={
-                                  gateChecks[i]
-                                    ? gate.color
-                                    : "rgba(255,255,255,0.1)"
-                                }
-                                strokeWidth={1.5}
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </motion.div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                <div className="mt-4 flex items-start gap-2.5 rounded-lg border border-hairline bg-white/[0.02] px-3 py-2.5">
+                  <span
+                    aria-hidden="true"
+                    className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
+                    style={{ backgroundColor: accent }}
+                  />
+                  <p className="font-mono text-[11px] leading-relaxed text-text-tertiary">
+                    {g.detail}
+                  </p>
                 </div>
-              </ScrollReveal>
-            </div>
+              </GlassCard>
+            </StaggerItem>
+          );
+        })}
+      </Stagger>
 
-            {/* Mobile: vertical pipeline */}
-            <div className="sm:hidden">
-              <div className="mx-auto max-w-xs space-y-0">
-                {gates.map((gate, i) => (
-                  <div key={gate.id}>
-                    <ScrollReveal delay={0.2 + i * 0.15}>
-                      <div
-                        className="flex items-center gap-3 rounded-xl border p-4 transition-all duration-500"
-                        style={{
-                          borderColor: gateChecks[i]
-                            ? `${gate.color}50`
-                            : "rgba(255,255,255,0.06)",
-                          background: gateChecks[i]
-                            ? `${gate.color}08`
-                            : "transparent",
-                        }}
-                      >
-                        <div
-                          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all duration-500"
-                          style={{
-                            background: gateChecks[i]
-                              ? `${gate.color}20`
-                              : "rgba(255,255,255,0.03)",
-                          }}
-                        >
-                          {gateChecks[i] ? (
-                            <motion.svg
-                              className="h-4 w-4"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              transition={{
-                                type: "spring",
-                                stiffness: 400,
-                                damping: 15,
-                              }}
-                            >
-                              <path
-                                d="M5 13l4 4L19 7"
-                                stroke={gate.color}
-                                strokeWidth={2.5}
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </motion.svg>
-                          ) : (
-                            <span
-                              className="text-xs font-bold"
-                              style={{ color: "rgba(255,255,255,0.2)" }}
-                            >
-                              {i + 1}
-                            </span>
-                          )}
-                        </div>
-                        <div>
-                          <h4
-                            className="text-sm font-semibold transition-colors duration-500"
-                            style={{
-                              color: gateChecks[i]
-                                ? gate.color
-                                : "rgba(255,255,255,0.4)",
-                            }}
-                          >
-                            Gate {i + 1}: {gate.shortName}
-                          </h4>
-                          <p className="text-[10px] text-text-muted">
-                            {gate.validates.length} validations
-                          </p>
-                        </div>
-                      </div>
-                    </ScrollReveal>
-                    {i < gates.length - 1 && (
-                      <div className="flex justify-center">
-                        <div
-                          className="h-5 w-px transition-all duration-500"
-                          style={{
-                            background: gateChecks[i]
-                              ? gate.color
-                              : "rgba(255,255,255,0.06)",
-                          }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+      {/* 3-gate validation pipeline */}
+      <Reveal direction="up" className="mt-16">
+        <div className="mb-6 flex items-center gap-2.5">
+          <span className="font-mono text-[11px] uppercase tracking-widest text-brand-300">
+            3-gate validation
+          </span>
+          <span aria-hidden="true" className="h-px flex-1 bg-hairline" />
+          <span className="font-mono text-[11px] uppercase tracking-widest text-text-tertiary">
+            every as-built update
+          </span>
         </div>
-      </Spotlight>
-    </section>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto_1fr_auto_1fr] md:items-stretch">
+          {gates.map((gate, i) => {
+            const accent = harmonize(gate.color);
+            return (
+              <div key={gate.id} className="contents">
+                <GlassCard tone="strong" className="flex h-full flex-col p-5 sm:p-6">
+                  <div className="flex items-center gap-3">
+                    <span
+                      aria-hidden="true"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg font-mono text-sm font-semibold"
+                      style={{
+                        color: accent,
+                        backgroundColor: alpha(accent, 0.12),
+                        boxShadow: `inset 0 0 0 1px ${alpha(accent, 0.35)}`,
+                      }}
+                    >
+                      {i + 1}
+                    </span>
+                    <div className="flex flex-col">
+                      <h3 className="text-base font-semibold leading-tight text-white">
+                        {gate.shortName}
+                      </h3>
+                      <span className="font-mono text-[10px] uppercase tracking-wider text-text-muted">
+                        {gate.name}
+                      </span>
+                    </div>
+                  </div>
+
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-text-secondary">
+                    {gate.description}
+                  </p>
+
+                  <ul className="mt-4 flex flex-wrap gap-1.5">
+                    {gate.validates.map((v) => (
+                      <li
+                        key={v}
+                        className="rounded-full border border-hairline bg-white/[0.025] px-2.5 py-1 font-mono text-[10px] text-text-tertiary"
+                      >
+                        {v}
+                      </li>
+                    ))}
+                  </ul>
+                </GlassCard>
+
+                {/* connector — desktop only, between gates */}
+                {i < gates.length - 1 && (
+                  <div aria-hidden="true" className="hidden items-center justify-center md:flex">
+                    <ChevronRight className="h-5 w-5 text-text-muted" />
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </Reveal>
+    </Section>
   );
 }

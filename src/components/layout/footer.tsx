@@ -1,135 +1,121 @@
 "use client";
 
-import { motion } from "framer-motion";
+import Link from "next/link";
+import { Github, Mail, ArrowUp } from "lucide-react";
 import { BrandMark } from "@/components/brand/brand-mark";
-
-const navLinks = [
-  { label: "Home", href: "/#hero" },
-  { label: "About", href: "/#about" },
-  { label: "Projects", href: "/#projects" },
-  { label: "Contact", href: "/#contact" },
-];
+import { Reveal } from "@/components/ui/reveal";
 
 const EMAIL = "davidbarker774@gmail.com";
 
+const nav = [
+  { label: "Capabilities", href: "/#capabilities" },
+  { label: "Work", href: "/#work" },
+  { label: "Approach", href: "/#approach" },
+  { label: "Contact", href: "/#contact" },
+];
+
+const projects = [
+  { label: "Hermes", href: "/projects/hermes" },
+  { label: "Hermes Pane", href: "/projects/hermes#generative-ui" },
+  { label: "Fabric Design", href: "/projects/hermes#multi-domain-reach" },
+];
+
 export function Footer() {
-  function scrollToTop() {
-    document.getElementById("hero")?.scrollIntoView({ behavior: "smooth" });
-  }
-
   return (
-    <footer className="relative bg-bg pt-20 pb-16">
+    <footer className="relative overflow-hidden border-t border-hairline pb-12 pt-20">
+      {/* layered glow */}
       <div
         aria-hidden="true"
-        className="absolute top-0 left-0 right-0 h-px"
+        className="pointer-events-none absolute -top-px left-0 right-0 h-px"
         style={{
           background:
-            "linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.3) 30%, rgba(251,191,36,0.3) 70%, transparent 100%)",
+            "linear-gradient(90deg, transparent, rgba(94,105,210,0.4) 30%, rgba(130,143,255,0.4) 70%, transparent)",
         }}
       />
       <div
         aria-hidden="true"
-        className="absolute top-0 left-1/2 -translate-x-1/2 h-24 w-[60%] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.06), transparent 70%)",
-        }}
+        className="pointer-events-none absolute left-1/2 top-0 h-40 w-[70%] -translate-x-1/2"
+        style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(94,105,210,0.10), transparent 70%)" }}
       />
 
-      <div className="relative mx-auto max-w-5xl px-6">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
-          {/* Brand + tagline */}
-          <div className="flex flex-col items-center md:items-start">
-            <div className="flex items-center gap-3">
-              <BrandMark size={32} color="#818cf8" animated={false} />
+      <div className="relative mx-auto max-w-6xl px-6">
+        <div className="grid grid-cols-2 gap-10 md:grid-cols-12">
+          {/* brand */}
+          <div className="col-span-2 md:col-span-5">
+            <Link href="/" className="inline-flex items-center gap-3">
+              <BrandMark size={30} color="#828fff" animated={false} />
               <span className="text-lg font-semibold text-white">DaBarkle</span>
-            </div>
-            <p className="mt-3 text-center text-sm text-text-tertiary md:text-left">
-              AI Harness Builder. I design ambient intelligence systems and operate them in production.
+            </Link>
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-text-tertiary">
+              I build the scaffolding around AI — memory, routing, guardrails, interfaces.
+              Not just a user of AI; an operator of it.
             </p>
-          </div>
-
-          {/* Nav links */}
-          <div className="flex flex-col items-center gap-2">
-            <span className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-text-muted">
-              Navigate
-            </span>
-            {navLinks.map((link) => (
+            <div className="mt-6 flex items-center gap-3">
               <a
-                key={link.label}
-                href={link.href}
-                className="text-sm text-text-tertiary transition-colors duration-200 hover:text-white"
+                href={`mailto:${EMAIL}`}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-border-default text-text-tertiary transition-colors hover:border-border-strong hover:text-white"
+                aria-label="Email David"
               >
-                {link.label}
+                <Mail className="h-[18px] w-[18px]" />
               </a>
-            ))}
-          </div>
-
-          {/* Contact */}
-          <div className="flex flex-col items-center md:items-end gap-2">
-            <span className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-text-muted">
-              Contact
-            </span>
-            <motion.a
-              href={`mailto:${EMAIL}`}
-              whileHover={{ y: -1 }}
-              transition={{ duration: 0.2 }}
-              className="group inline-flex items-center gap-2 rounded-full border border-border-default px-3.5 py-1.5 font-mono text-[12px] text-text-secondary transition-all duration-300 hover:border-brand-400/40 hover:text-white"
-            >
-              <svg
-                className="h-3.5 w-3.5 text-text-tertiary transition-colors duration-300 group-hover:text-brand-300"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="1.5"
+              <a
+                href="https://github.com/DaBarkle"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-border-default text-text-tertiary transition-colors hover:border-border-strong hover:text-white"
+                aria-label="GitHub"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-                />
-              </svg>
-              {EMAIL}
-            </motion.a>
+                <Github className="h-[18px] w-[18px]" />
+              </a>
+            </div>
+          </div>
+
+          <div className="md:col-span-3 md:col-start-7">
+            <h3 className="text-overline font-mono text-text-tertiary">Navigate</h3>
+            <ul className="mt-4 flex flex-col gap-3">
+              {nav.map((l) => (
+                <li key={l.label}>
+                  <Link
+                    href={l.href}
+                    className="text-sm text-text-secondary transition-colors hover:text-white"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="md:col-span-3">
+            <h3 className="text-overline font-mono text-text-tertiary">Work</h3>
+            <ul className="mt-4 flex flex-col gap-3">
+              {projects.map((l) => (
+                <li key={l.label}>
+                  <Link
+                    href={l.href}
+                    className="text-sm text-text-secondary transition-colors hover:text-white"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        {/* Back to top */}
-        <div className="mt-10 flex justify-center">
-          <motion.button
-            onClick={scrollToTop}
-            whileHover={{ y: -2 }}
-            transition={{ duration: 0.2 }}
-            className="group flex items-center gap-2 rounded-full border border-border-default px-4 py-2 text-xs font-medium text-text-tertiary transition-all duration-300 hover:border-border-strong hover:text-white"
-          >
-            <svg
-              className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-            </svg>
-            Back to top
-          </motion.button>
-        </div>
-
-        <div
-          aria-hidden="true"
-          className="mx-auto mt-10 mb-8 h-px w-24"
-          style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)",
-          }}
-        />
-
-        <div className="text-center">
-          <p className="font-mono text-sm text-text-tertiary">
-            Built with Next.js + Tailwind + Framer Motion &middot; Designed and shipped with Claude Code
+        <Reveal className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-hairline pt-8 sm:flex-row">
+          <p className="font-mono text-xs text-text-muted">
+            © {2026} David Barker · Built with Claude Code
           </p>
-          <p className="mt-2 text-xs text-text-muted">DaBarkle &middot; 2026</p>
-        </div>
+          <button
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="group inline-flex items-center gap-2 font-mono text-xs text-text-tertiary transition-colors hover:text-white"
+          >
+            Back to top
+            <ArrowUp className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5" />
+          </button>
+        </Reveal>
       </div>
     </footer>
   );
