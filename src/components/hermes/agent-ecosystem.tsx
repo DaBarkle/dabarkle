@@ -149,6 +149,135 @@ export function AgentEcosystem() {
           </Tabs>
         </ScrollReveal>
 
+        {/* How They Work Together */}
+        <ScrollReveal delay={0.25} className="mt-12 sm:mt-16">
+          <div className="mx-auto max-w-3xl">
+            <h3 className="mb-6 text-center text-h3 text-white">
+              How They Work Together
+            </h3>
+            <p className="mx-auto mb-8 max-w-xl text-center text-sm text-text-secondary">
+              These agents don&apos;t just work individually &mdash; they
+              collaborate in pipelines. Here&apos;s the session closeout flow.
+            </p>
+
+            {/* Horizontal collaboration flow — desktop */}
+            <div className="hidden sm:block">
+              <div className="flex items-center justify-center gap-3">
+                {(
+                  [
+                    {
+                      name: "Homelab Expert",
+                      model: "haiku",
+                      color: "#818cf8",
+                      arrow: true,
+                    },
+                    {
+                      name: "As-Built Surgeon",
+                      model: "sonnet",
+                      color: "#fbbf24",
+                      arrow: true,
+                    },
+                    {
+                      name: "Formatter",
+                      model: "haiku",
+                      color: "#14b8a6",
+                      arrow: true,
+                    },
+                    {
+                      name: "Optimizer",
+                      model: "opus",
+                      color: "#6366f1",
+                      arrow: false,
+                    },
+                  ] as const
+                ).map((agent) => (
+                  <div key={agent.name} className="flex items-center gap-3">
+                    <div className="flex flex-col items-center gap-1.5">
+                      <div
+                        className="flex h-10 w-10 items-center justify-center rounded-xl"
+                        style={{
+                          background: `${agent.color}15`,
+                          border: `1px solid ${agent.color}25`,
+                        }}
+                      >
+                        <div
+                          className="h-2 w-2 rounded-full"
+                          style={{
+                            background: agent.color,
+                            boxShadow: `0 0 6px ${agent.color}60`,
+                          }}
+                        />
+                      </div>
+                      <span
+                        className="text-[10px] font-semibold"
+                        style={{ color: agent.color }}
+                      >
+                        {agent.name}
+                      </span>
+                      <span
+                        className="rounded-full px-1.5 py-0.5 text-[8px] font-semibold uppercase"
+                        style={{
+                          color: modelColors[agent.model],
+                          background: `${modelColors[agent.model]}15`,
+                        }}
+                      >
+                        {agent.model}
+                      </span>
+                    </div>
+                    {agent.arrow && (
+                      <svg
+                        className="h-4 w-4 text-text-muted"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={1.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                        />
+                      </svg>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Mobile: vertical */}
+            <div className="sm:hidden">
+              <div className="flex flex-col items-center gap-2">
+                {(
+                  [
+                    { name: "Homelab Expert", color: "#818cf8" },
+                    { name: "As-Built Surgeon", color: "#fbbf24" },
+                    { name: "Formatter", color: "#14b8a6" },
+                    { name: "Optimizer", color: "#6366f1" },
+                  ] as const
+                ).map((agent, i) => (
+                  <div key={agent.name} className="flex flex-col items-center">
+                    {i > 0 && (
+                      <div
+                        className="mb-1 h-3 w-px"
+                        style={{ background: `${agent.color}40` }}
+                      />
+                    )}
+                    <div
+                      className="rounded-lg border px-3 py-1.5 text-xs font-medium"
+                      style={{
+                        borderColor: `${agent.color}30`,
+                        color: agent.color,
+                      }}
+                    >
+                      {agent.name}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </ScrollReveal>
+
         {/* Model legend */}
         <ScrollReveal delay={0.3} className="mt-10">
           <div className="mx-auto max-w-2xl rounded-xl border border-white/[0.06] bg-surface-0/40 p-5 backdrop-blur-sm">

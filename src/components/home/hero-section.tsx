@@ -9,9 +9,10 @@ import { BrandMark } from "@/components/brand/brand-mark";
 import { springs, easings, fadeUp, staggerContainer } from "@/lib/motion";
 
 const statPills = [
-  { label: "12 Agents", delay: 1.2 },
-  { label: "9 Capabilities", delay: 1.4 },
-  { label: "5-Level Memory", delay: 1.6 },
+  { label: "15 Agents", delay: 1.2 },
+  { label: "22 MCP Servers", delay: 1.4 },
+  { label: "32 Credentials Protected", delay: 1.6 },
+  { label: "5-Level Memory", delay: 1.8 },
 ];
 
 export function HeroSection() {
@@ -40,7 +41,7 @@ export function HeroSection() {
           transition={{ duration: 0.6, ease: easings.entrance }}
           className="mb-6 font-mono text-sm uppercase tracking-[0.2em] text-brand-400"
         >
-          Systems Architect &amp; Infrastructure Engineer
+          AI Harness Builder
         </motion.p>
 
         {/* Title with TextGenerateEffect wrapping the name */}
@@ -74,8 +75,11 @@ export function HeroSection() {
           transition={{ duration: 0.6, ease: easings.entrance }}
           className="mx-auto max-w-2xl text-xl leading-relaxed text-text-secondary md:text-2xl"
         >
-          Building intelligent systems that{" "}
-          <span className="font-semibold text-white">evolve themselves</span>.
+          I build the scaffolding around AI &mdash; the memory, the routing,
+          the guardrails, the interfaces.{" "}
+          <span className="font-semibold text-white">
+            Not just users of AI; operators of it.
+          </span>
         </motion.p>
 
         {/* Floating stat pills */}

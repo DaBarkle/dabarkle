@@ -22,7 +22,7 @@ export function BuiltWithAI() {
       {/* Dramatic text reveal */}
       <div className="py-24 px-6">
         <div className="mx-auto max-w-4xl">
-          <TextReveal text="Every line of code in Hermes was prompted into existence through Claude Code. The interesting question isn't who wrote the code. It's whether conversational AI development can produce ambient intelligence systems with real engineering rigor. Fifteen production sessions suggest it can." />
+          <TextReveal text="Every line of code in Hermes was prompted into existence through Claude Code. From 4-agent pipelines to 5-level memory to self-improving optimization — all built through conversation. The question isn't who wrote the code. It's whether conversational AI development can produce ambient intelligence with real engineering rigor. Twenty production sessions and zero data loss incidents suggest it can." />
         </div>
       </div>
 
@@ -42,9 +42,9 @@ export function BuiltWithAI() {
           <p className="mb-10 text-lg leading-relaxed text-text-secondary">
             What IS genuinely engineered is the architecture: the intent-based
             routing that makes 12 agents discoverable, the ambient memory that
-            builds knowledge across sessions, the safety-first approach that
-            guarantees zero data loss, and the self-improving feedback loops
-            that have deployed 19 optimizations autonomously.
+            builds knowledge across sessions, the trust model that keeps all
+            data local with zero untrusted code, and the self-improving feedback
+            loops that have deployed 20 optimizations autonomously.
           </p>
         </ScrollReveal>
 

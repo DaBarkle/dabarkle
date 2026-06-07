@@ -99,10 +99,12 @@ export function AmbientMemory() {
         <div className="mt-16 sm:mt-20">
           <ScrollReveal>
             <h3 className="mb-2 text-center text-h3 text-white">
-              Standing on Shoulders
+              Memory: Standing on Shoulders
             </h3>
             <p className="mx-auto mb-8 max-w-xl text-center text-sm text-text-secondary">
-              Built on OpenClaw&apos;s memsearch foundation, extended with automatic capture and intelligence enrichment.
+              Built on OpenClaw&apos;s memsearch foundation, extended with
+              automatic multi-layer capture and five intelligence enrichment
+              layers.
             </p>
           </ScrollReveal>
           <OpenClawComparison />

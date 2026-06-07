@@ -1,28 +1,28 @@
 import type { Metadata } from "next";
 import { HermesHero } from "@/components/hermes/hermes-hero";
-import { WhyHermes } from "@/components/hermes/why-hermes";
-import { AmbientVision } from "@/components/hermes/ambient-vision";
-import { IntentRouter } from "@/components/hermes/intent-router";
-import { AgentEcosystem } from "@/components/hermes/agent-ecosystem";
-import { SessionCloseoutWalkthrough } from "@/components/hermes/session-closeout-walkthrough";
-import { AmbientMemory } from "@/components/hermes/ambient-memory";
-import { TrustSecurity } from "@/components/hermes/trust-security";
-import { SelfOptimization } from "@/components/hermes/self-optimization";
-import { SafetyGuardrails } from "@/components/hermes/safety-guardrails";
+import { LiveSnapshot } from "@/components/hermes/live-snapshot";
+import { WhatItDoesBento } from "@/components/hermes/what-it-does-bento";
 import { MetricsDashboard } from "@/components/hermes/metrics-dashboard";
-import { ClaudeVsHermes } from "@/components/hermes/claude-vs-hermes";
+import { TheStage } from "@/components/hermes/the-stage";
+import { GuardianSentinel } from "@/components/hermes/guardian-sentinel";
+import { AmbientMemory } from "@/components/hermes/ambient-memory";
+import { IntentRouter } from "@/components/hermes/intent-router";
+import { GenerativeUI } from "@/components/hermes/generative-ui";
+import { MultiDomainReach } from "@/components/hermes/multi-domain-reach";
+import { SelfImprovementTwoSystems } from "@/components/hermes/self-improvement-two-systems";
+import { SafetyGuardrails } from "@/components/hermes/safety-guardrails";
 import { BuiltWithAI } from "@/components/hermes/built-with-ai";
 import { Footer } from "@/components/layout/footer";
 import { SectionDivider } from "@/components/shared/section-divider";
 
 export const metadata: Metadata = {
-  title: "Hermes -- Ambient Intelligence Platform",
+  title: "Hermes — Ambient Intelligence Platform",
   description:
-    "A unified platform that continuously learns, routes intent naturally, and acts proactively. 12 agents, 9 capabilities, 5-level memory. Built with Claude Code.",
+    "An ambient intelligence platform with situated state, structural credential security, generative UI, and reach across homelab, banking, network fleet, voice, and design. 15 agents, 22 MCP servers, 32 protected credentials, 5-level memory. Built with Claude Code.",
   openGraph: {
-    title: "Hermes -- Ambient Intelligence Platform",
+    title: "Hermes — Ambient Intelligence Platform",
     description:
-      "An ambient intelligence system with intent-based routing, 5-level memory, and self-optimization. Built with Claude.",
+      "An ambient intelligence platform with The Stage, Guardian + Sentinel, generative UI, and multi-domain reach. Built conversationally with Claude Code.",
     type: "article",
   },
 };
@@ -31,29 +31,40 @@ export default function HermesPage() {
   return (
     <>
       <main id="main">
+        {/* Recruiter layer */}
         <HermesHero />
-        <WhyHermes />
+        <LiveSnapshot />
         <SectionDivider variant="brand" />
-        <AmbientVision />
-        <SectionDivider variant="accent" />
-        <IntentRouter />
-        <SectionDivider variant="mixed" />
-        <AgentEcosystem />
-        <SectionDivider variant="accent" />
-        <SessionCloseoutWalkthrough />
-        <SectionDivider variant="brand" />
-        <AmbientMemory />
-        <SectionDivider variant="mixed" />
-        <TrustSecurity />
-        <SectionDivider variant="accent" />
-        <SelfOptimization />
-        <SectionDivider variant="mixed" />
-        <SafetyGuardrails />
+        <WhatItDoesBento />
         <SectionDivider variant="accent" />
         <MetricsDashboard />
-        <SectionDivider variant="accent" />
-        <ClaudeVsHermes />
+        <SectionDivider variant="mixed" />
+
+        {/* Flagships */}
+        <TheStage />
         <SectionDivider variant="brand" />
+        <GuardianSentinel />
+        <SectionDivider variant="accent" />
+
+        {/* Architecture deep-dives */}
+        <AmbientMemory />
+        <SectionDivider variant="mixed" />
+        <IntentRouter />
+        <SectionDivider variant="brand" />
+
+        {/* Flagships continued */}
+        <GenerativeUI />
+        <SectionDivider variant="accent" />
+        <MultiDomainReach />
+        <SectionDivider variant="mixed" />
+
+        {/* Substrate + safety */}
+        <SelfImprovementTwoSystems />
+        <SectionDivider variant="accent" />
+        <SafetyGuardrails />
+        <SectionDivider variant="brand" />
+
+        {/* Closer */}
         <BuiltWithAI />
       </main>
       <Footer />

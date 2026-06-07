@@ -9,14 +9,19 @@ import { springs, easings, fadeUp, fadeScale, staggerContainer } from "@/lib/mot
 
 const statItems = [
   {
-    value: `${metrics.capabilities}`,
-    label: "capabilities",
-    sublabel: "intent-routed",
+    value: `${metrics.mcpServers}`,
+    label: "MCP servers",
+    sublabel: "tool surfaces",
   },
   {
     value: `${metrics.agents}`,
     label: "agents",
-    sublabel: "two domains",
+    sublabel: "model-assigned",
+  },
+  {
+    value: `${metrics.credentials}`,
+    label: "credentials",
+    sublabel: "structurally protected",
   },
   {
     value: `${metrics.memoryLayers}`,
@@ -125,11 +130,20 @@ export function HermesHero() {
           <motion.p
             variants={fadeUp}
             transition={{ duration: 0.5, ease: easings.entrance }}
+            className="mx-auto mb-3 max-w-2xl text-base font-medium text-text-tertiary"
+          >
+            One operator. One system. Every domain.
+          </motion.p>
+
+          <motion.p
+            variants={fadeUp}
+            transition={{ duration: 0.5, ease: easings.entrance }}
             className="mx-auto max-w-2xl text-lg leading-relaxed text-text-secondary"
           >
-            A unified platform that continuously learns, routes intent
-            naturally, and acts proactively &mdash; built entirely through
-            conversational AI development with Claude Code.
+            An ambient intelligence platform with situated state, structural
+            credential security, generative UI, and reach across homelab,
+            banking, network fleet, voice, and design &mdash; all built
+            conversationally with Claude Code.
           </motion.p>
 
           {/* Stat pills */}

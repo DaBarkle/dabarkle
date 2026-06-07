@@ -23,11 +23,11 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "DaBarkle — Systems Architect & Infrastructure Engineer",
+    default: "DaBarkle — AI Harness Builder",
     template: "%s | DaBarkle",
   },
   description:
-    "Building intelligent systems that evolve themselves. Portfolio of DaBarkle — systems architecture, AI orchestration, and infrastructure automation.",
+    "I build the scaffolding around AI — memory, routing, guardrails, interfaces. Portfolio of DaBarkle, builder and operator of Hermes, an ambient intelligence platform.",
   icons: {
     icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>",
   },

@@ -12,28 +12,36 @@ const agents = [
   { label: "Expert", color: "#818cf8" },
   { label: "Surgeon", color: "#fbbf24" },
   { label: "Optimizer", color: "#6366f1" },
+  { label: "Fleet", color: "#a5b4fc" },
   { label: "Designer", color: "#f59e0b" },
   { label: "Investigator", color: "#2dd4bf" },
   { label: "Formatter", color: "#14b8a6" },
+  { label: "Auditor", color: "#ef4444" },
 ];
 
 const tags = [
   "Ambient Intelligence",
-  "Intent Routing",
-  "Self-Optimizing",
-  "Semantic Memory",
+  "Situated State",
+  "Guardian + Sentinel",
+  "Generative UI",
 ];
 
-const comingSoon = [
+const subProjects = [
   {
-    title: "Infrastructure Monitor",
-    description: "Real-time observability dashboard for homelab metrics",
-    icon: "M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z",
+    title: "Hermes Pane",
+    description:
+      "Mobile-first generative UI that composes a custom React panel for every operator intent, bound to live MCP tools across the homelab.",
+    href: "/projects/hermes#generative-ui",
+    icon: "M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z",
+    tag: "Generative UI",
   },
   {
-    title: "Agent Framework",
-    description: "Reusable multi-agent toolkit for orchestration patterns",
-    icon: "M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z",
+    title: "Fabric Design",
+    description:
+      "Brand-aware deck generator with two pipelines — creative HTML composition for novel formats, strict Slides API mode for template-locked work.",
+    href: "/projects/hermes#multi-domain-reach",
+    icon: "M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42",
+    tag: "Slide System",
   },
 ];
 
@@ -144,16 +152,16 @@ export function ProjectsSection() {
                         <div className="mb-6 flex flex-wrap gap-6">
                           <div className="flex items-baseline gap-1.5">
                             <CountUp
-                              value={9}
+                              value={22}
                               className="text-2xl font-bold text-white"
                             />
                             <span className="text-xs text-text-tertiary">
-                              Capabilities
+                              MCP Servers
                             </span>
                           </div>
                           <div className="flex items-baseline gap-1.5">
                             <CountUp
-                              value={12}
+                              value={15}
                               className="text-2xl font-bold text-white"
                             />
                             <span className="text-xs text-text-tertiary">
@@ -162,11 +170,11 @@ export function ProjectsSection() {
                           </div>
                           <div className="flex items-baseline gap-1.5">
                             <CountUp
-                              value={3}
+                              value={32}
                               className="text-2xl font-bold text-white"
                             />
                             <span className="text-xs text-text-tertiary">
-                              Memory Layers
+                              Credentials
                             </span>
                           </div>
                         </div>
@@ -208,51 +216,58 @@ export function ProjectsSection() {
             </Link>
           </ScrollReveal>
 
-          {/* Coming Soon */}
+          {/* Sub-projects within Hermes */}
           <div className="grid gap-6 md:grid-cols-2">
-            {comingSoon.map((project, i) => (
+            {subProjects.map((project, i) => (
               <ScrollReveal key={project.title} delay={0.5 + i * 0.15}>
-                <motion.div
-                  whileHover={{ y: -2, transition: { duration: 0.25 } }}
-                  className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-surface-1 p-8 transition-all duration-500 hover:border-white/[0.12] hover:shadow-lg hover:shadow-accent-500/5"
-                >
-                  {/* Gradient sweep on hover */}
-                  <div
-                    className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, rgba(99,102,241,0.05) 0%, transparent 50%, rgba(251,191,36,0.05) 100%)",
-                    }}
-                  />
-                  <div className="relative">
-                    <div className="mb-4 flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.03] transition-colors duration-300 group-hover:bg-white/[0.06]">
-                        <svg
-                          className="h-5 w-5 text-text-tertiary transition-colors duration-300 group-hover:text-text-secondary"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d={project.icon}
-                          />
-                        </svg>
+                <Link href={project.href} className="block">
+                  <motion.div
+                    whileHover={{ y: -2, transition: { duration: 0.25 } }}
+                    className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-surface-1 p-8 transition-all duration-500 hover:border-white/[0.12] hover:shadow-lg hover:shadow-accent-500/5"
+                  >
+                    <div
+                      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, rgba(99,102,241,0.05) 0%, transparent 50%, rgba(251,191,36,0.05) 100%)",
+                      }}
+                    />
+                    <div className="relative">
+                      <div className="mb-4 flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.03] transition-colors duration-300 group-hover:bg-white/[0.06]">
+                          <svg
+                            className="h-5 w-5 text-brand-400 transition-colors duration-300 group-hover:text-brand-300"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d={project.icon}
+                            />
+                          </svg>
+                        </div>
+                        <span className="rounded-full border border-brand-500/20 bg-brand-500/10 px-3 py-1 text-[10px] font-medium uppercase tracking-widest text-brand-300">
+                          {project.tag}
+                        </span>
                       </div>
-                      <span className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-[10px] font-medium uppercase tracking-widest text-text-muted">
-                        Coming Soon
+                      <h3 className="mb-2 text-lg font-semibold text-white transition-colors duration-300 group-hover:text-white">
+                        {project.title}
+                      </h3>
+                      <p className="mb-3 text-sm leading-relaxed text-text-secondary">
+                        {project.description}
+                      </p>
+                      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-accent-400 transition-all duration-200 group-hover:gap-2">
+                        Inside Hermes
+                        <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
                       </span>
                     </div>
-                    <h3 className="mb-2 text-lg font-semibold text-text-tertiary transition-colors duration-300 group-hover:text-text-secondary">
-                      {project.title}
-                    </h3>
-                    <p className="text-sm leading-relaxed text-text-muted">
-                      {project.description}
-                    </p>
-                  </div>
-                </motion.div>
+                  </motion.div>
+                </Link>
               </ScrollReveal>
             ))}
           </div>
