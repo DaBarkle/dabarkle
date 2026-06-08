@@ -1128,7 +1128,7 @@ export const openClawComparisons: OpenClawComparison[] = [
 export const memoryStats = {
   captureLevels: 5,
   intelligenceLayers: 5,
-  vectorsStored: 380,
+  vectorsStored: 8200,
   patternChecks: 11,
   llmSyncDependency: "Zero",
 };
