@@ -73,7 +73,7 @@ export function FeaturedWork() {
                     {[
                       { v: 22, l: "MCP servers" },
                       { v: 15, l: "Agents" },
-                      { v: 32, l: "Credentials" },
+                      { v: 36, l: "Credentials" },
                     ].map((s) => (
                       <div key={s.l} className="flex items-baseline gap-1.5">
                         <CountUp value={s.v} className="text-2xl font-semibold text-white" />

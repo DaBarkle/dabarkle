@@ -11,7 +11,7 @@ import { GridOverlay } from "@/components/visuals/grid-overlay";
 import { Spotlight } from "@/components/visuals/spotlight";
 import { easings } from "@/lib/motion";
 
-const STATS = ["15 Agents", "22 MCP Servers", "5-Level Memory", "130 Days Live"];
+const STATS = ["15 Agents", "22 MCP Servers", "5-Level Memory", "155 Days Live"];
 
 export function Hero() {
   const reduced = useReducedMotion();

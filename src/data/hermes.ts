@@ -1,4 +1,4 @@
-// Hermes showcase data — May 14, 2026
+// Hermes showcase data — refreshed June 8, 2026
 // Privacy-safe. Reflects current system state; no live infrastructure details.
 
 // ============================================================
@@ -10,7 +10,7 @@ export const metrics = {
   mcpServers: 22,
   skills: 7,
   projects: 6,
-  credentials: 32,
+  credentials: 36,
   memoryLayers: 5,
   intelligenceLayers: 5,
   stagePublishers: 14,
@@ -23,9 +23,9 @@ export const metrics = {
   fabricIcons: 313,
   fabricFonts: 21,
   guardianEndpoints: 9,
-  sentinelRules: 21,
-  asbuiltVersion: "v9.0",
-  daysRunning: 130,
+  sentinelRules: 22,
+  asbuiltVersion: "v9.2",
+  daysRunning: 155,
 };
 
 // ============================================================
@@ -680,9 +680,9 @@ export interface CredentialDomain {
 
 export const credentialDomains: CredentialDomain[] = [
   { label: "SSH + Sudo", count: 2, examples: ["ssh.nyx", "sudo.nyx"], color: "#818cf8" },
-  { label: "Service APIs", count: 12, examples: ["sabnzbd", "sonarr", "radarr", "prowlarr", "overseerr", "plex", "tdarr", "tautulli", "tmdb", "pushcut", "openai", "truelayer"], color: "#fbbf24" },
-  { label: "Wi-Fi", count: 3, examples: ["olympus", "styx", "tartarus"], color: "#14b8a6" },
-  { label: "UniFi", count: 4, examples: ["udm.home", "buckland.sso", "buckland.admin.1", "buckland.admin.2"], color: "#6366f1" },
+  { label: "Service APIs", count: 13, examples: ["sabnzbd", "sonarr", "radarr", "prowlarr", "overseerr", "plex", "tdarr", "tautulli", "tmdb", "pushcut", "openai", "truelayer"], color: "#fbbf24" },
+  { label: "Wi-Fi", count: 4, examples: ["aegis", "olympus", "styx", "tartarus"], color: "#14b8a6" },
+  { label: "UniFi", count: 6, examples: ["udm.home", "buckland.sso", "buckland.admin.1", "buckland.admin.2"], color: "#6366f1" },
   { label: "Network Fleet", count: 2, examples: ["wireguard.buckland.1", "wireguard.buckland.2"], color: "#a5b4fc" },
   { label: "Hermes Pane", count: 2, examples: ["pane.auth", "pane.cookie"], color: "#f59e0b" },
   { label: "Wazuh", count: 2, examples: ["wazuh.dashboard", "wazuh.api"], color: "#ef4444" },
@@ -690,8 +690,8 @@ export const credentialDomains: CredentialDomain[] = [
 ];
 
 export const sentinelStats = {
-  protectedCredentials: 32,
-  totalRules: 21,
+  protectedCredentials: 36,
+  totalRules: 22,
   learnedRules: 0,
   leaksIntercepted: 43,
   e2eTests: "15/15 passing",
@@ -1152,7 +1152,7 @@ export const guardrails: Guardrail[] = [
     title: "Credentials are structurally unreachable",
     description:
       "Sentinel rewrites credential-exposing commands at PreToolUse; values never enter the LLM context. 1Password vault is read+write for the Guardian service account only.",
-    detail: "32 credentials protected · 43 leaks intercepted across prior sessions · 0 reached the model.",
+    detail: "36 credentials protected · 43 leaks intercepted across prior sessions · 0 reached the model.",
     color: "#fbbf24",
     icon: "M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z",
   },

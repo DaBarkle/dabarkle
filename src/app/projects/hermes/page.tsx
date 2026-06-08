@@ -18,7 +18,7 @@ import { SectionDivider } from "@/components/shared/section-divider";
 export const metadata: Metadata = {
   title: "Hermes — Ambient Intelligence Platform",
   description:
-    "An ambient intelligence platform with situated state, structural credential security, generative UI, and reach across homelab, banking, network fleet, voice, and design. 15 agents, 22 MCP servers, 32 protected credentials, 5-level memory. Built with Claude Code.",
+    "An ambient intelligence platform with situated state, structural credential security, generative UI, and reach across homelab, banking, network fleet, voice, and design. 15 agents, 22 MCP servers, 36 protected credentials, 5-level memory. Built with Claude Code.",
   openGraph: {
     title: "Hermes — Ambient Intelligence Platform",
     description:

@@ -5,11 +5,11 @@ import { Reveal } from "@/components/ui/reveal";
 const METRICS = [
   { value: 15, label: "Agents", caption: "Each with an explicit model assignment" },
   { value: 22, label: "MCP servers", caption: "Registered tool surfaces" },
-  { value: 32, label: "Credentials", caption: "Structurally unreachable from the model" },
+  { value: 36, label: "Credentials", caption: "Structurally unreachable from the model" },
   { value: 5, label: "Memory layers", caption: "Capture levels feeding Qdrant" },
   { value: 14, label: "Stage publishers", caption: "Producing salience-ranked attention" },
   { value: 19, label: "Optimizations", caption: "Auto-applied, zero manual reverts" },
-  { value: 130, label: "Days live", caption: "Operating in production", suffix: "+" },
+  { value: 155, label: "Days live", caption: "Operating in production", suffix: "+" },
   { value: 0, label: "Leaks reached the model", caption: "43 intercepted at the structural layer" },
 ];
 
