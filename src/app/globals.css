@@ -371,6 +371,8 @@ body {
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @keyframes scanline { 0% { background-position: 0 -40px; } 100% { background-position: 0 100%; } }
 @keyframes glow-pulse { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
+/* MindSection salience decay bars — transform-only; duration/easing set inline per class */
+@keyframes salience-drain { from { transform: scaleX(1); } to { transform: scaleX(0.04); } }
 @keyframes gentle-float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 @keyframes aurora-orb-0 { 0%, 100% { transform: translate(0%, 0%) scale(1); } 25% { transform: translate(10%, -15%) scale(1.1); } 50% { transform: translate(-5%, 10%) scale(0.95); } 75% { transform: translate(-10%, -5%) scale(1.05); } }

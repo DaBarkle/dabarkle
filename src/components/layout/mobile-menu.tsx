@@ -11,10 +11,11 @@ import { useActiveSection } from "@/hooks/use-active-section";
 import { cn } from "@/lib/utils";
 
 const SECTIONS = [
-  { id: "capabilities", label: "Capabilities" },
-  { id: "work", label: "Work" },
-  { id: "approach", label: "Approach" },
-  { id: "contact", label: "Contact" },
+  { id: "explainer", label: "How it works" },
+  { id: "life-of-a-prompt", label: "The loop" },
+  { id: "numbers", label: "Numbers" },
+  { id: "projects", label: "Projects" },
+  { id: "engineer", label: "The engineer" },
 ];
 const SECTION_IDS = SECTIONS.map((s) => s.id);
 const EMAIL = "davidbarker774@gmail.com";

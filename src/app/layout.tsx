@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     template: "%s · DaBarkle",
   },
   description:
-    "I build the scaffolding around AI — memory, routing, guardrails, interfaces. Portfolio of David Barker (DaBarkle), builder and operator of Hermes, an ambient intelligence platform.",
+    "I run my infrastructure through an AI that remembers, acts, and audits itself. Portfolio of David Barker (DaBarkle), builder and operator of Hermes — an ambient AI harness with 20.8ms semantic memory, structural credential security, and a nightly self-verifier. Built on Claude Code.",
   keywords: [
     "AI harness",
     "ambient intelligence",
@@ -49,13 +49,13 @@ export const metadata: Metadata = {
     siteName: "DaBarkle",
     title: "DaBarkle — AI Harness Builder",
     description:
-      "Not just a user of AI — an operator of it. Builder of Hermes, an ambient intelligence platform: 15 agents, 22 MCP servers, structural credential security, 5-level memory.",
+      "Not just a user of AI — an operator of it. Builder of Hermes, an ambient AI harness: 8,734-vector memory recalled in 20.8ms, 37 credentials the model can't read, 23 behavioral contracts audited nightly.",
   },
   twitter: {
     card: "summary_large_image",
     title: "DaBarkle — AI Harness Builder",
     description:
-      "Builder and operator of Hermes, an ambient intelligence platform. Memory, routing, guardrails, generative UI.",
+      "Builder and operator of Hermes, an ambient AI harness. Memory, routing, structural guardrails, generative UI — built on Claude Code.",
   },
   icons: {
     icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88' fill='%235e6ad2'>✦</text></svg>",

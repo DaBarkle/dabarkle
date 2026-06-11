@@ -94,3 +94,30 @@ export const directional = (dir: 1 | -1): Variants => ({
   visible: { opacity: 1, x: 0 },
   exit: { opacity: 0, x: -24 * dir },
 });
+
+/* ---- Uplift additions (2026-06-12) — append-only ------------------------ */
+
+/**
+ * maskRise — word-level masked rise for SplitHeading. Each word lives inside
+ * an `overflow-hidden` wrapper and travels y 110% → 0, so the text appears to
+ * rise out of an invisible mask. Apply to the inner (word) span; put
+ * `maskRiseContainer` on the parent for the word stagger.
+ */
+export const maskRise: Variants = {
+  hidden: { y: "110%" },
+  visible: { y: "0%", transition: { duration: durations.slow, ease: easings.entrance } },
+};
+
+/** Container counterpart for maskRise — staggers words at 45ms. */
+export const maskRiseContainer: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.045 } },
+};
+
+/**
+ * tickerSpring — overdamped spring for StatTicker count-ups. Damping ratio
+ * ≈ 1.7 (no overshoot — a stat must never display a value above its truth),
+ * settles in ~1.2s. Shape matches framer-motion's SpringOptions for
+ * `useSpring`.
+ */
+export const tickerSpring = { stiffness: 80, damping: 30, mass: 1 } as const;
