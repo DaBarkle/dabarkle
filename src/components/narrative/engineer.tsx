@@ -60,9 +60,9 @@ export function TheEngineer() {
   return (
     <Section id="engineer">
       <div className="mb-12 flex flex-col gap-4 sm:mb-16">
-        <Eyebrow>The engineer</Eyebrow>
+        <Eyebrow>The builder</Eyebrow>
         <SplitHeading as="h2" className="text-h1 text-white">
-          The engineer behind it.
+          The builder behind it.
         </SplitHeading>
       </div>
 
@@ -71,7 +71,7 @@ export function TheEngineer() {
         <div className="lg:col-span-7">
           <Reveal className="flex flex-col gap-6 text-body-lg text-pretty text-text-secondary">
             <p>
-              David Barker is a software engineer, and Hermes is how he works: one ambient system,
+              David Barker is a systems builder, and Hermes is how he works: one ambient system,
               on his own hardware, in production since {PRODUCTION_SINCE}.{" "}
               <span className="font-medium text-white">Not just a user of AI; an operator of it.</span>{" "}
               A user prompts a model and hopes. An operator builds the runtime around it — memory,
@@ -91,7 +91,7 @@ export function TheEngineer() {
               every finding closed.
             </p>
             <p>
-              He&apos;s also the kind of engineer whose system remembers the night he had to pull the
+              He&apos;s also the kind of builder whose system remembers the night he had to pull the
               power — and whose response was to design so it can never happen again. In the
               system&apos;s own words, from its own identity file:
             </p>
@@ -135,7 +135,7 @@ export function TheEngineer() {
             <div id="contact" className="scroll-mt-28">
               <GlassCard tone="strong" gradientBorder className="p-7 sm:p-8">
                 <p className="font-mono text-overline text-brand-300">Contact</p>
-                <h3 className="mt-4 text-h3 text-white">Talk to the engineer, not the system.</h3>
+                <h3 className="mt-4 text-h3 text-white">Talk to the builder, not the system.</h3>
                 <p className="mt-3 text-sm leading-relaxed text-ink-muted">
                   Harness design, ambient systems, or how any of this actually works under the hood —
                   I read every email.

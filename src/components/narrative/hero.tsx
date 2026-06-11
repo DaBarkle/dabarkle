@@ -86,7 +86,7 @@ export function NarrativeHero() {
         {/* ---- Copy column ------------------------------------------------ */}
         <motion.div {...introProps}>
           <motion.div variants={itemV} transition={tEntrance}>
-            <Eyebrow>David Barker — software engineer · builder &amp; operator of Hermes</Eyebrow>
+            <Eyebrow>David Barker — systems builder · operator of Hermes</Eyebrow>
           </motion.div>
 
           <SplitHeading as="h1" className="mt-5 text-display-sm text-balance text-white">

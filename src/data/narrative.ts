@@ -57,7 +57,7 @@ export const explainerBeats: ExplainerBeat[] = [
     title: "A harness is the runtime around the model.",
     body: [
       "An AI harness wraps the stateless function in the machinery it lacks: memory that persists and is retrieved into context at the right moment, brokered access to tools (typed APIs the model can call), lifecycle hooks that inject state and intercept actions, and guardrails that make safety structural rather than polite.",
-      "If the model is a process, the harness is the runtime plus the service mesh around it. Hermes is one harness, built on Claude Code, run in production on one engineer's real infrastructure since January 2026.",
+      "If the model is a process, the harness is the runtime plus the service mesh around it. Hermes is one harness, built on Claude Code, run in production on one person's real infrastructure since January 2026.",
     ],
     vignette: "harness-ring",
   },

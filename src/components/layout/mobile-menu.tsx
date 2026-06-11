@@ -15,7 +15,7 @@ const SECTIONS = [
   { id: "life-of-a-prompt", label: "The loop" },
   { id: "numbers", label: "Numbers" },
   { id: "projects", label: "Projects" },
-  { id: "engineer", label: "The engineer" },
+  { id: "engineer", label: "The builder" },
 ];
 const SECTION_IDS = SECTIONS.map((s) => s.id);
 const EMAIL = "davidbarker774@gmail.com";
