@@ -16,8 +16,17 @@ import { infrastructure, selfImprovement, VERIFIED_AT } from "@/data/system";
 const HOST_HARDWARE = "Ryzen 7 7800X3D · 64 GB DDR5 · RTX 3090";
 // source: "Nyx VM (Ubuntu 24.04.3, 2 vCPU / 4GB RAM, LUKS+LVM encrypted)" — as-built §6.1
 const VM_PLATFORM = "Ubuntu 24.04.3 · LUKS-encrypted";
-// source: "7 services in /srv/docker/docker-compose.yml: gluetun, sonarr, radarr, sabnzbd, prowlarr, seerr, recyclarr — 6 via network_mode: service:gluetun" — as-built §7.2/§14.9
-const VPN_TENANTS = ["sonarr", "radarr", "sabnzbd", "prowlarr", "seerr", "recyclarr"] as const;
+// source: as-built §7.2/§14.9 — 7 services in one compose file, 6 of them via
+// network_mode: service:<gateway>. Real service names generalised to roles for
+// publication (personal stack).
+const VPN_TENANTS = [
+  "tv-automation",
+  "film-automation",
+  "download-client",
+  "indexer-manager",
+  "request-portal",
+  "quality-sync",
+] as const;
 // source: host runs Wazuh Manager (containerized), Uptime Kuma, and the Hermes substrate — as-built §1.3/§3.1/§15.1; Qdrant is live at localhost:6333 (system.ts memory source)
 const HOST_SERVICES = ["Hermes substrate", "Wazuh SIEM", "Qdrant vector store", "Uptime Kuma monitoring"] as const;
 // source: "static blackhole routes for the full IPv4 space (0.0.0.0/1 and 128.0.0.0/1) persisted in the UniFi controller DB" — as-built §2.11
@@ -37,7 +46,7 @@ const DEFENSES: ReadonlyArray<{ value: string; label: string; detail: string }> 
   {
     value: String(infrastructure.stackedVpnTunnels),
     label: "stacked VPN tunnels",
-    detail: "UDM tunnel + Gluetun WireGuard",
+    detail: "UDM tunnel + gateway WireGuard",
   },
   {
     value: String(infrastructure.killSwitchLayers),
@@ -83,8 +92,8 @@ const PIPELINE: ReadonlyArray<{ k: string; label: string; detail: string }> = [
 
 /**
  * DeepInfrastructure — the two-machine topology drawn as nested panels (the
- * Gluetun ring physically contains its six tenants: remove the ring and the
- * chips have no edges out), the defence-in-depth instrument row, the
+ * VPN-gateway ring physically contains its six tenants: remove the ring and
+ * the chips have no edges out), the defence-in-depth instrument row, the
  * trust-tiered UniFi fleet, and the self-maintaining as-built doc with its
  * boot-cascade receipt.
  */
@@ -151,7 +160,7 @@ export function DeepInfrastructure() {
               <span aria-hidden="true" className="h-px w-10 bg-hairline-strong lg:h-10 lg:w-px" />
             </div>
 
-            {/* Nyx VM with the Gluetun ring */}
+            {/* Nyx VM with the VPN-gateway ring */}
             <div className="rounded-xl border border-hairline bg-white/[0.02] p-5">
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <div>
@@ -167,7 +176,7 @@ export function DeepInfrastructure() {
               </div>
               <div className="mt-4 rounded-lg border border-dashed border-brand-400/40 bg-brand-500/5 p-4">
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <p className="font-mono text-[12px] text-brand-300">gluetun — VPN gateway</p>
+                  <p className="font-mono text-[12px] text-brand-300">vpn-gateway — sole WAN egress</p>
                   <p className="font-mono text-[10px] tracking-[0.1em] text-ink-faint uppercase">
                     tunnel №2 · WireGuard
                   </p>
@@ -184,9 +193,9 @@ export function DeepInfrastructure() {
                 </ul>
               </div>
               <p className="mt-3 text-[13px] leading-relaxed text-ink-subtle">
-                {infrastructure.containersInVpnNamespace} containers share Gluetun&apos;s network
-                namespace. If the tunnel drops they don&apos;t leak — they have no network path at
-                all. VPN-or-nothing, by construction.
+                {infrastructure.containersInVpnNamespace} containers share the gateway&apos;s
+                network namespace. If the tunnel drops they don&apos;t leak — they have no network
+                path at all. VPN-or-nothing, by construction.
               </p>
             </div>
           </div>
@@ -273,7 +282,7 @@ export function DeepInfrastructure() {
             />
           </div>
           <p className="mt-5 text-sm leading-relaxed text-ink-muted">
-            Receipt: the Gluetun boot race caused {BOOT_INCIDENTS_BEFORE} cascade failures in 2
+            Receipt: a gateway boot race caused {BOOT_INCIDENTS_BEFORE} cascade failures in 2
             months. Orchestration moved from Docker to systemd —{" "}
             {infrastructure.cascadeFailuresAfterFix} since. The incident, the root cause, and the
             fix are all in the doc.

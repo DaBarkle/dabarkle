@@ -283,8 +283,8 @@ export function DeepSecurity() {
           <p>
             Rotation is orchestrated by the agent and executed by handlers it can’t see into: a{" "}
             {ROTATION_SCRIPT_KB} KB rotation script with ~{security.rotationHandlers} per-service
-            handlers — SSH, four WiFi VLANs, UniFi, Uptime Kuma, SABnzbd, Sonarr, Radarr, Prowlarr,
-            Tdarr, two Wazuh tiers — plus provisioning that generates passwords inside Guardian
+            handlers — SSH, four WiFi VLANs, UniFi, Uptime Kuma, the six-service media-automation
+            suite, transcode automation, two Wazuh tiers — plus provisioning that generates passwords inside Guardian
             with per-credential phone approval. Create, apply, rotate: the value never enters the
             model’s context at any step.
           </p>

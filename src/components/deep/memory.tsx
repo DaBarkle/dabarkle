@@ -313,8 +313,8 @@ export function DeepMemory() {
           <p className="mt-3">
             At embed time the engine applies {memory.intelligenceLayers} deterministic
             intelligence layers — cross-project correlation, infrastructure dependency enrichment
-            (gluetun entries are tagged with every downstream service that loses network if it
-            fails), intent expansion, quality scoring {QUALITY_SCALE}, and pattern detection —
+            (VPN-gateway entries are tagged with every downstream service that loses network if
+            it fails), intent expansion, quality scoring {QUALITY_SCALE}, and pattern detection —
             with zero LLM dependency, so enrichment runs in milliseconds and cannot fail open.
           </p>
           <div className="mt-3 flex flex-wrap gap-2">

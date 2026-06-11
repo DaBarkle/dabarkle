@@ -22,11 +22,12 @@ const LEARNED_RULE_DATE = "2026-06-11";
 // "Bash|Read|Grep|Write|Edit|mcp__.*" deciding ALLOW / REWRITE / BLOCK
 const INTERCEPT_MATCHER = "Bash|Read|Grep|Write|Edit|mcp__.*";
 // source: /tmp/dabarkle-discovery.json → harness[2].diagram_idea — the canonical
-// rewrite example: `cat docker-compose.yml` → `curl guardian/read-redacted`,
-// placeholder [GUARDIAN:sonarr-api-key]
+// rewrite example: `cat docker-compose.yml` → `curl guardian/read-redacted`.
+// Service identity generalised for publication (real placeholder names a
+// specific service key).
 const EXAMPLE_PROPOSED = "cat docker-compose.yml";
 const EXAMPLE_REWRITTEN = "curl guardian/read-redacted";
-const EXAMPLE_PLACEHOLDER = "[GUARDIAN:sonarr-api-key]";
+const EXAMPLE_PLACEHOLDER = "[GUARDIAN:media-svc-api-key]";
 // source: /tmp/dabarkle-discovery.json → harness[2].facts — entropy thresholds:
 // Shannon > 3.5 (MCP args), > 4.5 + 3-of-4 character classes (file writes),
 // minimum token length 12
@@ -157,7 +158,7 @@ export function Guardrails() {
                   {EXAMPLE_PROPOSED}
                 </p>
                 <p className="text-ink-faint">
-                  # would print SONARR_API_KEY=
+                  # would print MEDIA_SVC_API_KEY=
                   <span aria-hidden="true">••••••••••••</span>
                   <span className="sr-only">(redacted)</span>
                 </p>

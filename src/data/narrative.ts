@@ -13,10 +13,10 @@
 export const heroTranscript = {
   title: "hermes — live session (abridged)",
   lines: [
-    { prompt: true, text: "is it safe to restart sonarr?" },
+    { prompt: true, text: "is it safe to restart the media stack?" },
     { dim: true, text: "→ intel_is_it_safe_to_restart · checking dependents, queue, VPN chain" },
-    { text: "Not yet — SABnzbd is mid-download on 2 items routed through the same" },
-    { text: "VPN namespace, and Sonarr has an import pending. Gluetun is healthy." },
+    { text: "Not yet — the download client is mid-transfer on 2 items routed through" },
+    { text: "the same VPN namespace, and a library import is pending. Gateway healthy." },
     { text: "Safe window once the queue drains (~12 min). Want me to wait and do it?" },
     { prompt: true, text: "yes, then check the leak monitor after" },
     { dim: true, text: "→ scheduled · restart + 60s egress-IP verification queued" },

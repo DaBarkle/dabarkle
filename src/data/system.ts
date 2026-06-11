@@ -169,10 +169,10 @@ export const fleet = {
 // Infrastructure under management
 // ------------------------------------------------------------
 export const infrastructure = {
-  mediaStackServices: 7, // gluetun + sonarr, radarr, sabnzbd, prowlarr, seerr, recyclarr
+  mediaStackServices: 7, // VPN gateway + 6 automation services (TV, film, downloads, indexing, requests, quality-sync)
   containersInVpnNamespace: 6,
   vlans: 4,
-  stackedVpnTunnels: 2, // UDM split-vpn + Gluetun WireGuard
+  stackedVpnTunnels: 2, // UDM split-vpn + gateway-container WireGuard
   killSwitchLayers: 3,
   uptimeKumaMonitors: 15,
   leakCheckIntervalSeconds: 60,

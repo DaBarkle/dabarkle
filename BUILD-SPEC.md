@@ -15,6 +15,7 @@ before writing code.
   - No client names/addresses/employer names: the residential network project is "a residential new-build (anonymised)"; the work webapp is "an air-gapped onboarding expert for a workplace Mac pilot"; the remote network site is "a relative's remote site".
   - No third-party emails or family details beyond "my brother" / "my mum".
   - Only the pre-vetted quotes in `src/data/mind.ts` may be quoted from the self-model/dreams.
+  - **Never name personal media-stack services** (the *arr suite, download client, VPN gateway container, transcode tool, media server, request portal) — in rendered copy OR source comments (the repo is public). Use role names: tv-automation, film-automation, download-client, indexer-manager, request-portal, quality-sync, vpn-gateway, transcode automation. Neutral professional tools (Qdrant, Wazuh, UniFi, Uptime Kuma, WireGuard, Docker, systemd) may be named.
 - **Accessibility / motion:** every animated component gates on `useReducedMotion()` (static final state when reduced); decoration is `aria-hidden`; interactive elements keep native focus semantics; respect the existing `prefers-reduced-motion` global CSS kill block. Animate **transform/opacity/SVG stroke only** — never blur, filter, box-shadow, or layout properties on scroll.
 - **Performance:** server components by default, `"use client"` only on motion leaves. No setState-per-mousemove (CSS variable pattern, see `spotlight-card.tsx`). `viewport={{ once: true }}` for entrances; scroll-linked values via `useScroll`/`useTransform`/`useSpring` motion values only. Max ~3 `backdrop-blur` panes per viewport — prefer `bg-[rgba(16,16,22,0.8)]` fakes elsewhere.
 
@@ -71,7 +72,7 @@ self-integration + deintegration with protected components), `deep/fleet.tsx`
 lazy proxy with 304-tool catalog), `deep/selfimprove.tsx` (vitals/reflex/
 optimizer trio, mutation probes, autonomous build under HALT conditions with
 divergence log), `deep/infrastructure.tsx` (Bazzite+Nyx topology, 7-service
-media stack inside Gluetun namespace, double-VPN, 3 kill-switch layers, SIEM,
+media stack inside the VPN-gateway namespace, double-VPN, 3 kill-switch layers, SIEM,
 15 monitors, 60s leak checks, as-built doc 4,413 lines), `deep/attribution-table.tsx`
 (the full two-column boundary). Use `GoDeeper` collapsibles for expert detail
 (server-rendered `<details>`), TerminalWindow for traces/config excerpts.
